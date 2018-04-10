@@ -5,7 +5,8 @@
   "main": "main.js",
   "dependencies": {
     "chai": "^4.1.2",
-    "picklejs": "github:lwoites/picklejs"
+    "picklejs": "github:lwoites/picklejs",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "eslint": "^4.19.1",
