@@ -1,8 +1,17 @@
-
 const picklejs = require('picklejs');
 
+class Artist {
+  constructor(_name,_country){
+    this.name = _name;
+    this.country = _country;
+  }
+}
 
 class UNQfy {
+
+  constructor(){
+    this.artists = [];
+  }
   getTracksMatchingGenres(genres) {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
 
@@ -18,7 +27,7 @@ class UNQfy {
      params.country (string)
   */
   addArtist(params) {
-    // El objeto artista creado debe soportar (al menos) las propiedades name (string) y country (string)
+   this.artists.push(new Artist(params.name,params.country));
   }
 
 
@@ -45,7 +54,9 @@ class UNQfy {
   }
 
   getArtistByName(name) {
-
+    return this.artists.find(function (artist){
+      return artist.name==name;
+    });
   }
 
   getAlbumByName(name) {
