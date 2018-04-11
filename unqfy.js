@@ -1,15 +1,33 @@
 const picklejs = require('picklejs');
 
-class Artist {
-  constructor(_name,_country){
+class Album {
+  constructor(_name, _year) {
     this.name = _name;
-    this.country = _country;
+    this.year = _year;
   }
 }
 
+class Artist {
+  constructor(_name, _country) {
+    this.name = _name;
+    this.country = _country;
+    this.albums = [];
+  }
+
+  addAlbum(params) {
+    const album = new Album(params.name, params.year);
+    this.albums.push(album);
+  }
+
+  hasAlbum(_name) {
+    return this.albums.some( album => album.name === _name);
+  }
+}
+
+
 class UNQfy {
 
-  constructor(){
+  constructor() {
     this.artists = [];
   }
   getTracksMatchingGenres(genres) {
@@ -27,7 +45,7 @@ class UNQfy {
      params.country (string)
   */
   addArtist(params) {
-   this.artists.push(new Artist(params.name,params.country));
+    this.artists.push(new Artist(params.name, params.country));
   }
 
 
@@ -36,7 +54,8 @@ class UNQfy {
       params.year (number)
   */
   addAlbum(artistName, params) {
-    // El objeto album creado debe tener (al menos) las propiedades name (string) y year
+    const author = this.getArtistByName(artistName);
+    author.addAlbum(params);
   }
 
 
@@ -54,13 +73,19 @@ class UNQfy {
   }
 
   getArtistByName(name) {
-    return this.artists.find(function (artist){
-      return artist.name==name;
+    return this.artists.find((artist) => {
+      return artist.name === name;
     });
   }
 
   getAlbumByName(name) {
-
+    let res;
+    this.artists.forEach(element => {
+      if (element.hasAlbum(name)) {
+        res = element.albums.find(album => album.name === name);
+      }
+    });
+    return res;
   }
 
   getTrackByName(name) {
