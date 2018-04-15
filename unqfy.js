@@ -1,9 +1,29 @@
 const picklejs = require('picklejs');
 
+class Track {
+  constructor(_name,_duration,_genres){
+    this.name = _name;
+    this.duration = _duration;
+    this.genres = [];
+    this.addGenero(_genres);
+  }
+
+  addGenero(_genres){
+    _genres.forEach(element => {
+      this.genres.push(element);
+    });
+  }
+}
+
 class Album {
   constructor(_name, _year) {
     this.name = _name;
     this.year = _year;
+    this.tracks = [];
+  }
+
+  addTrack(_nameTrack){
+    this.tracks.push(_nameTrack);
   }
 }
 
@@ -15,8 +35,7 @@ class Artist {
   }
 
   addAlbum(params) {
-    const album = new Album(params.name, params.year);
-    this.albums.push(album);
+    this.albums.push(params);
   }
 
   hasAlbum(_name) {
@@ -29,6 +48,8 @@ class UNQfy {
 
   constructor() {
     this.artists = [];
+    this.tracks = [];
+    this.albums = [];
   }
   getTracksMatchingGenres(genres) {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
@@ -54,8 +75,10 @@ class UNQfy {
       params.year (number)
   */
   addAlbum(artistName, params) {
+    const album = new Album(params.name, params.year);
     const author = this.getArtistByName(artistName);
-    author.addAlbum(params);
+    author.addAlbum(album.name);
+    this.albums.push(album);
   }
 
 
@@ -65,11 +88,10 @@ class UNQfy {
        params.genres (lista de strings)
   */
   addTrack(albumName, params) {
-    /* El objeto track creado debe soportar (al menos) las propiedades:
-         name (string),
-         duration (number),
-         genres (lista de strings)
-    */
+    const track = new Track(params.name,params.duration,params.genres);
+    const album = this.getAlbumByName(albumName);
+    this.tracks.push(track);
+    album.addTrack(track.name);
   }
 
   getArtistByName(name) {
@@ -79,17 +101,15 @@ class UNQfy {
   }
 
   getAlbumByName(name) {
-    let res;
-    this.artists.forEach(element => {
-      if (element.hasAlbum(name)) {
-        res = element.albums.find(album => album.name === name);
-      }
+    return this.albums.find((album)=>{
+      return album.name===name;
     });
-    return res;
   }
 
   getTrackByName(name) {
-
+    return this.tracks.find((track)=>{
+      return track.name===name;
+    });
   }
 
   getPlaylistByName(name) {
