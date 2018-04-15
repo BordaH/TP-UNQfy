@@ -10,38 +10,27 @@ class Playlist{
   }
 
   addGenders(_genders){
-   _genders.forEach(element=>{ this.genres.push(element);});
+    _genders.forEach(element=>{ this.genres.push(element);});
   }
 
-  duration(){
+  realDuration(){
     return this.duration;
   }
-  hasTrack(){
-    return this.tracks.some( album => album.name === _name);
+
+  durationLeft(){
+    return this.duration - this.tracks.reduce((t1,t2) => t1.duration + t2.duration,0);
+  }
+  hasTrack(_track){
+    return this.tracks.some( track => track.name === _track.name);
   }
 }
 
 class Track {
-  constructor(_name,_duration,_genres,_author){
+  constructor(_name,_duration,_genre,_author){
     this.name = _name;
     this.duration = _duration;
-    this.genres = [];
+    this.genre = _genre;
     this.author = _author;
-    this.addGenders(_genres);
-  }
-  
-  addGenders(_genders){
-    _genders.forEach(element=>{ this.genres.push(element);});
-  }
-
-  hasGender(_genders){
-    let res = false;
-    _genders.forEach(element => {
-      if(this.genres.includes(element)){
-        res = true;
-      }
-    });
-    return res;
   }
 }
 
@@ -92,7 +81,7 @@ class UNQfy {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
     const res = [];
     this.tracks.forEach(element => {
-      if(element.hasGender(genres)){
+      if(genres.includes(element.genre)){
         res.push(element);
       }
     });
@@ -102,7 +91,7 @@ class UNQfy {
   getTracksMatchingArtist(artistName) {
     const res = [];
     this.tracks.forEach(element => {
-       if(element.author===artistName.name){ res.push(element);}
+      if(element.author===artistName.name){ res.push(element);}
     });
     return res;
   }
@@ -169,9 +158,26 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist
     */
-   const playlist = new Playlist(name,genresToInclude,maxDuration);
-   this.playlists.push(playlist);
+    const playlist = new Playlist(name,genresToInclude,maxDuration);
+    while(this.canAddTrackTo(playlist)){
+      this.addTrackTo(playlist);
+    }
+    this.playlists.push(playlist);
 
+
+  }
+
+  canAddTrackTo(playlist){
+    return playlist.durationLeft() > 4 || this.areTracksLeftFor(playlist);
+  }
+
+  areTracksLeftFor(playlist){
+    return this.getTracksMatchingGenres(playlist.genres).some((track) => !playlist.hasTrack(track));
+  }
+
+  addTrackTo(playlist){
+    const trackToBeAdded = this.tracks.find((track) => playlist.genres.includes(track.genres));
+    playlist.tracks.push(trackToBeAdded);
   }
 
   save(filename = 'unqfy.json') {

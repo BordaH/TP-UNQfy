@@ -46,26 +46,24 @@ describe('Add, remove and filter data', () => {
   it('should add a track to an album', () => {
     createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
     createAndAddAlbum(unqfy, 'Guns n\' Roses', 'Appetite for Destruction', 1987);
-    const track = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, ['rock', 'hard rock']);
+    const track = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, 'rock');
 
     assert.equal(track.name, 'Welcome to the jungle');
     assert.strictEqual(track.duration, 200);
-    assert.equal(track.genres.includes('rock'), true);
-    assert.equal(track.genres.includes('hard rock'), true);
-    assert.lengthOf(track.genres, 2);
+    assert.equal(track.genre, 'rock');
   });
 
   it('should get all tracks matching genres', () => {
     createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
     createAndAddAlbum(unqfy, 'Guns n\' Roses', 'Appetite for Destruction', 1987);
-    const t0 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, ['rock', 'hard rock', 'movie']);
-    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', "Sweet Child o' Mine", 500, ['rock', 'hard rock', 'pop', 'movie']);
+    const t0 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, 'movie');
+    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', "Sweet Child o' Mine", 500, 'movie');
 
     createAndAddArtist(unqfy, 'Michael Jackson', 'USA');
     createAndAddAlbum(unqfy, 'Michael Jackson', 'Thriller', 1987);
-    const t2 = createAndAddTrack(unqfy, 'Thriller', 'Trhiller', 200, ['pop', 'movie']);
-    createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, ['classic']);
-    const t3 = createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500, ['movie']);
+    const t2 = createAndAddTrack(unqfy, 'Thriller', 'Trhiller', 200, 'movie');
+    createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, 'classic');
+    const t3 = createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500, 'movie');
 
     const tracksMatching = unqfy.getTracksMatchingGenres(['pop', 'movie']);
 
