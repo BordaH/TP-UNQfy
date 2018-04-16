@@ -1,27 +1,27 @@
 const picklejs = require('picklejs');
 
 class Playlist{
-  constructor(_name,_genders,_maxDuration){
+  constructor(_name,_genres,_maxDuration){
     this.name=_name;
     this.genres =[];
     this.tracks =[];
-    this.duration = _maxDuration;
-    this.addGenders(_genders);
+    this.maxDuration = _maxDuration;
+    this.addGenres(_genres);
   }
 
-  addGenders(_genders){
+  addGenres(_genders){
     _genders.forEach(element=>{ this.genres.push(element);});
   }
 
   realDuration(){
-    return this.duration;
+    return this.tracks.map(t => t.duration).reduce((a, b) => a + b,0) ;
   }
 
   durationLeft(){
-    return this.duration - this.tracks.reduce((t1,t2) => t1.duration + t2.duration,0);
+    return this.maxDuration - this.realDuration();
   }
   hasTrack(_track){
-    return this.tracks.some( track => track.name === _track.name);
+    return this.tracks.some( (track) => track.name === _track.name);
   }
 }
 
@@ -168,16 +168,19 @@ class UNQfy {
   }
 
   canAddTrackTo(playlist){
-    return playlist.durationLeft() > 4 || this.areTracksLeftFor(playlist);
+    return  this.areTracksLeftFor(playlist);
+  }
+
+  trackToBeAdded(playlist){
+    return this.tracks.find((track) => playlist.genres.includes(track.genre) && !playlist.hasTrack(track)&& track.duration <= playlist.durationLeft());
   }
 
   areTracksLeftFor(playlist){
-    return this.getTracksMatchingGenres(playlist.genres).some((track) => !playlist.hasTrack(track));
+    return this.getTracksMatchingGenres(playlist.genres).some((track) => !playlist.hasTrack(track) && track.duration <= playlist.durationLeft());
   }
 
   addTrackTo(playlist){
-    const trackToBeAdded = this.tracks.find((track) => playlist.genres.includes(track.genres));
-    playlist.tracks.push(trackToBeAdded);
+    playlist.tracks.push(this.trackToBeAdded(playlist));
   }
 
   save(filename = 'unqfy.json') {

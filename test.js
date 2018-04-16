@@ -137,20 +137,21 @@ describe('Playlist Creation and properties', () => {
   it('should create a playlist as requested', () => {
     createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
     createAndAddAlbum(unqfy, 'Guns n\' Roses', 'Appetite for Destruction', 1987);
-    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, ['rock', 'hard rock', 'movie']);
-    createAndAddTrack(unqfy, 'Appetite for Destruction', "Sweet Child o' Mine", 1500, ['rock', 'hard rock', 'pop', 'movie']);
+    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, 'rock');
+    createAndAddTrack(unqfy, 'Appetite for Destruction', "Sweet Child o' Mine", 1500, 'rock');
 
     createAndAddArtist(unqfy, 'Michael Jackson', 'USA');
     createAndAddAlbum(unqfy, 'Michael Jackson', 'Thriller', 1987);
-    const t2 = createAndAddTrack(unqfy, 'Thriller', 'Thriller', 200, ['pop', 'movie']);
-    const t3 = createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, ['pop']);
-    const t4 = createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500, ['pop']);
+    const t2 = createAndAddTrack(unqfy, 'Thriller', 'Thriller', 200, 'pop');
+    const t3 = createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, 'pop');
+    const t4 = createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500,'pop');
 
     unqfy.addPlaylist('my playlist', ['pop', 'rock'], 1400);
     const playlist = unqfy.getPlaylistByName('my playlist');
+    console.log(playlist);
 
     assert.equal(playlist.name, 'my playlist');
-    assert.isAtMost(playlist.duration(), 1400);
+    assert.isAtMost(playlist.realDuration(), 1400);
     assert.isTrue(playlist.hasTrack(t1));
     assert.isTrue(playlist.hasTrack(t2));
     assert.isTrue(playlist.hasTrack(t3));
