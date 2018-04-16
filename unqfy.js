@@ -171,12 +171,15 @@ class UNQfy {
     return  this.areTracksLeftFor(playlist);
   }
 
+  isValidTrack(track,playlist){
+    return !playlist.hasTrack(track)&& track.duration <= playlist.durationLeft();
+  }
   trackToBeAdded(playlist){
-    return this.tracks.find((track) => playlist.genres.includes(track.genre) && !playlist.hasTrack(track)&& track.duration <= playlist.durationLeft());
+    return this.tracks.find((track) => playlist.genres.includes(track.genre) && this.isValidTrack(track,playlist));
   }
 
   areTracksLeftFor(playlist){
-    return this.getTracksMatchingGenres(playlist.genres).some((track) => !playlist.hasTrack(track) && track.duration <= playlist.durationLeft());
+    return this.getTracksMatchingGenres(playlist.genres).some((track) => this.isValidTrack(track,playlist));
   }
 
   addTrackTo(playlist){
