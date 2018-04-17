@@ -16,107 +16,50 @@
       "0": "__00006__"
     },
     "__00003__": {
-      "0": "__00007__",
-      "1": "__00008__"
+      "0": "__00007__"
     },
     "__00004__": {
-      "0": "__00009__"
+      "0": "__00008__"
     },
     "__00005__": {
-      "0": "__00010__",
-      "1": "__00011__",
-      "2": "__00012__",
-      "3": "__00013__",
-      "4": "__00014__",
-      "5": "__00015__",
-      "6": "__00016__",
-      "7": "__00017__"
+      "0": "__00009__"
     },
     "__00006__": {
       "name": "Queen",
       "country": "England",
-      "albums": "__00018__"
+      "albums": "__00010__"
     },
     "__00007__": {
-      "name": "We are the champions",
-      "duration": "3:10",
-      "genre": "Clasic",
-      "author": "Queen"
-    },
-    "__00008__": {
-      "name": "Luca capo",
-      "duration": "3:10",
+      "name": "We are the Champions",
+      "duration": 3,
       "genre": "rock",
       "author": "Queen"
     },
-    "__00009__": {
-      "name": "News Of The World",
-      "tracks": "__00019__",
+    "__00008__": {
+      "name": "News of the World",
+      "year": 1987,
+      "tracks": "__00011__",
       "author": "Queen"
     },
+    "__00009__": {
+      "name": "aaaa",
+      "genres": "__00012__",
+      "tracks": "__00013__",
+      "maxDuration": 1200
+    },
     "__00010__": {
-      "name": "Playlist 1",
-      "genres": "[rock,reggae]",
-      "tracks": "__00020__",
-      "maxDuration": "1200"
+      "0": "News of the World"
     },
     "__00011__": {
-      "name": "Playlist cheta ",
-      "genres": "[Clasic,rock,reggae]",
-      "tracks": "__00021__",
-      "maxDuration": "1200"
+      "0": "We are the Champions"
     },
     "__00012__": {
-      "name": "luca",
-      "genres": "[Clasic]",
-      "tracks": "__00022__",
-      "maxDuration": "1200000"
+      "0": "rock",
+      "1": "cumbia"
     },
     "__00013__": {
-      "name": "luca",
-      "genres": "Clasic",
-      "tracks": "__00023__",
-      "maxDuration": "1200000"
-    },
-    "__00014__": {
-      "name": "lll",
-      "genres": "Clasic",
-      "tracks": "__00024__",
-      "maxDuration": "1200000"
-    },
-    "__00015__": {
-      "name": "Ffff",
-      "genres": "[rock]",
-      "tracks": "__00025__",
-      "maxDuration": "1200000"
-    },
-    "__00016__": {
-      "name": "Playlist",
-      "genres": "cheta",
-      "tracks": "__00026__",
-      "maxDuration": "2"
-    },
-    "__00017__": {
-      "name": "Playlist cheta 2",
-      "genres": "[Clasic]",
-      "tracks": "__00027__",
-      "maxDuration": "1200"
-    },
-    "__00018__": {
-      "0": "News Of The World"
-    },
-    "__00019__": {
-      "0": "We are the champions",
-      "1": "Luca capo"
-    },
-    "__00020__": {},
-    "__00021__": {},
-    "__00022__": {},
-    "__00023__": {},
-    "__00024__": {},
-    "__00025__": {},
-    "__00026__": {},
-    "__00027__": {}
+      "0": "__00007__"
+    }
   },
   "types": {
     "__00001__": "UNQfy",
@@ -126,25 +69,11 @@
     "__00005__": "Array",
     "__00006__": "Artist",
     "__00007__": "Track",
-    "__00008__": "Track",
-    "__00009__": "Album",
-    "__00010__": "Playlist",
-    "__00011__": "Playlist",
-    "__00012__": "Playlist",
-    "__00013__": "Playlist",
-    "__00014__": "Playlist",
-    "__00015__": "Playlist",
-    "__00016__": "Playlist",
-    "__00017__": "Playlist",
-    "__00018__": "Array",
-    "__00019__": "Array",
-    "__00020__": "Array",
-    "__00021__": "Array",
-    "__00022__": "Array",
-    "__00023__": "Array",
-    "__00024__": "Array",
-    "__00025__": "Array",
-    "__00026__": "Array",
-    "__00027__": "Array"
+    "__00008__": "Album",
+    "__00009__": "Playlist",
+    "__00010__": "Array",
+    "__00011__": "Array",
+    "__00012__": "Array",
+    "__00013__": "Array"
   }
 }

@@ -33,7 +33,7 @@ function main() {
     unqfy.addAlbum(argumentos[1], { name: argumentos[2], year: parseInt(argumentos[3])});
     break;
   case 'addPlaylist':
-    unqfy.addPlaylist(argumentos[1], argumentos[2], parseInt(argumentos[3]));
+    unqfy.addPlaylist(argumentos[1], argumentos[2].split(','), parseInt(argumentos[3]));
     break;
   case 'getArtistByName':
     console.log(unqfy.getArtistByName(argumentos[1]));

@@ -183,6 +183,7 @@ class UNQfy {
       this.addTrackTo(playlist);
     }
     this.playlists.push(playlist);
+    console.log("The playlist was added correctly");
   }
 
   canAddTrackTo(playlist){
