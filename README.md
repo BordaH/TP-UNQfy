@@ -24,7 +24,7 @@
   #### Agregar playlist
    Para crear una playlist puede usar el comando *addPlaylist*, el comando recibe nombre , generos que va a incluir y duracion maxima, se invoca de la siguiente manera:
    
-    node main.js addPlaylist "Mi super playlist" ['rock','cumbia','reggae'] "1200"
+    node main.js addPlaylist "Mi super playlist" "rock, cumbia, reggae" "1200"
 
   #### Agregar playlist
    Para crear una playlist puede usar el comando *addPlaylist*, el comando recibe nombre , generos que va a incluir y duracion maxima, se invoca de la siguiente manera:
