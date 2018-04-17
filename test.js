@@ -16,7 +16,7 @@ function createAndAddAlbum(unqfy, artistName, albumName, albumYear) {
 }
 
 function createAndAddTrack(unqfy, albumName, trackName, trackDuraction, trackGenres) {
-  unqfy.addTrack(albumName, { name: trackName, duration: trackDuraction, genres: trackGenres });
+  unqfy.addTrack(albumName, { name: trackName, duration: trackDuraction, genres: trackGenres});
   return unqfy.getTrackByName(trackName);
 }
 

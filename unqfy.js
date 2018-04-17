@@ -9,8 +9,8 @@ class Playlist{
     this.addGenres(_genres);
   }
 
-  addGenres(_genders){
-    _genders.forEach(element=>{ this.genres.push(element);});
+  addGenres(genders){
+    genders.forEach((e)=>this.tracks.push(e));
   }
 
   realDuration(){
@@ -42,8 +42,8 @@ class Album {
     this.author = _author;
   }
 
-  addTrack(_nameTrack){
-    this.tracks.push(_nameTrack);
+  addTrack(nameTrack){
+    this.tracks.push(nameTrack);
   }
 }
 
@@ -101,6 +101,7 @@ class UNQfy {
   */
   addArtist(params) {
     this.artists.push(new Artist(params.name, params.country));
+    console.log("The artist was added correctly");
   }
 
 
@@ -110,11 +111,15 @@ class UNQfy {
   */
   addAlbum(artistName, params) {
     const author = this.getArtistByName(artistName);
-    const album = new Album(params.name, params.year,author.name);
-    author.addAlbum(album.name);
-    this.albums.push(album);
+    if(author!==undefined){
+      const album = new Album(params.name, params.year,author.name);
+      author.addAlbum(album.name);
+      this.albums.push(album);
+      console.log("The album was added correctly");
+    }else{
+      throw new ExceptionUNQfy('You can not add the album since the artist ' + artistName + ' does not exist');
+    }
   }
-
 
   /* Debe soportar (al menos):
        params.name (string)
@@ -123,33 +128,53 @@ class UNQfy {
   */
   addTrack(albumName, params) {
     const album = this.getAlbumByName(albumName);
-    const track = new Track(params.name,params.duration,params.genres,album.author);
-    this.tracks.push(track);
-    album.addTrack(track.name);
+    if(album!==undefined){
+      const track = new Track(params.name,params.duration,params.genres,album.author);
+      this.tracks.push(track);
+      album.addTrack(track.name);
+      console.log("The song was added correctly");
+    }else{
+      throw new ExceptionUNQfy('You can not add the track since the album ' + albumName + 'does not exist.');
+    }
   }
 
   getArtistByName(name) {
-    return this.artists.find((artist) => {
+    const artist = this.artists.find((artist) => {
       return artist.name === name;
     });
+    if(artist !==undefined){
+      return artist;
+    }else{
+      throw new ExceptionUNQfy('There is no named artist ' + name);
+    }
   }
 
   getAlbumByName(name) {
-    return this.albums.find((album)=>{
-      return album.name===name;
-    });
+   const album = this.albums.find((album)=>{return album.name===name;});
+
+    if(album !==undefined){
+      return album;
+    }else{
+      throw new ExceptionUNQfy('There is no named album ' + name);
+    }
   }
 
   getTrackByName(name) {
-    return this.tracks.find((track)=>{
-      return track.name===name;
-    });
+    const track =  this.tracks.find((track)=>{return track.name===name;});
+    if(track !==undefined){
+      return track;
+    }else{
+      throw new ExceptionUNQfy('There is no named track ' + name);
+    }
   }
 
   getPlaylistByName(name) {
-    return this.playlists.find((playlist)=>{
-      return playlist.name===name;
-    });
+    const playlist =  this.playlists.find((playlist)=>{return playlist.name===name;});
+    if(playlist !==undefined){
+      return playlist;
+    }else{
+      throw new ExceptionUNQfy("There is no named playlist " + name);
+    }
   }
 
   addPlaylist(name, genresToInclude, maxDuration) {
@@ -163,8 +188,6 @@ class UNQfy {
       this.addTrackTo(playlist);
     }
     this.playlists.push(playlist);
-
-
   }
 
   canAddTrackTo(playlist){
@@ -193,14 +216,17 @@ class UNQfy {
   static load(filename = 'unqfy.json') {
     const fs = new picklejs.FileSerializer();
     // TODO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy];
+    const classes = [UNQfy, Artist, Track, Album, Playlist];
     fs.registerClasses(...classes);
     return fs.load(filename);
   }
 }
-
 // TODO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
 module.exports = {
   UNQfy,
 };
 
+function ExceptionUNQfy(message){
+  this.message = message;
+  this.name    = 'ExceptionUNQfy';
+}
