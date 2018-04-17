@@ -1,6 +1,6 @@
 # TP-UNQfy
 
-##Diagrama de clases
+## Diagrama de clases
 
  ![Diagrama UML](./diagrama_uml.jpg)
 
