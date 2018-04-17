@@ -2,8 +2,8 @@
 
 ##Diagrama de clases
 
- ![Diagrama UML](./diagrama_uml.xml)
- 
+ ![Diagrama UML](./diagrama_uml.jpg)
+
 
 ## Uso de CLI
   #### Agregar artistas
