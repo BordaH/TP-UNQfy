@@ -1,5 +1,9 @@
 # TP-UNQfy
 
+##Diagrama de clases
+
+ ![Diagrama UML](./diagrama_uml.xml)
+ 
 
 ## Uso de CLI
   #### Agregar artistas
@@ -7,16 +11,15 @@
 
     node main.js addArtist "Peter Tosh" "Jamaica"
 
+  #### Agregar album
+   Para agregar albums puede usar el comando *addAlbum*, el comando recibe el nombre del autor nombre y año del album a añadir, se invoca de la siguiente manera:
+   
+    node main.js addAlbum "Gun's and Roses" "Appetite for destruction" "1987"
 
   #### Agregar tracks
-   Para agregar tracks puede usar el comando *addTrack*, el comando recibe nombre , duracion y genero del track a añadir, se invoca de la siguiente manera:
+   Para agregar tracks puede usar el comando *addTrack*, el comando recibe nombre de album al que pertenece, nombre, duracion y genero del track a añadir, se invoca de la siguiente manera:
    
-    node main.js addTrack "We are the champions" "3:10" "rock"
-
-  #### Agregar album
-   Para agregar albums puede usar el comando *addAlbum*, el comando recibe nombre y año del track a añadir, se invoca de la siguiente manera:
-   
-    node main.js addAlbum "Appetite for destruction" "1987"
+    node main.js addTrack "News Of The World" "We are the champions" "3:10" "rock"
 
   #### Agregar playlist
    Para crear una playlist puede usar el comando *addPlaylist*, el comando recibe nombre , generos que va a incluir y duracion maxima, se invoca de la siguiente manera:

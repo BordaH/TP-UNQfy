@@ -3,14 +3,9 @@ const picklejs = require('picklejs');
 class Playlist{
   constructor(_name,_genres,_maxDuration){
     this.name=_name;
-    this.genres =[];
+    this.genres  = _genres ;
     this.tracks =[];
     this.maxDuration = _maxDuration;
-    this.addGenres(_genres);
-  }
-
-  addGenres(genders){
-    genders.forEach((e)=>this.tracks.push(e));
   }
 
   realDuration(){
