@@ -26,12 +26,6 @@
    
     node main.js addPlaylist "Mi super playlist" "rock, cumbia, reggae" "1200"
 
-  #### Agregar playlist
-   Para crear una playlist puede usar el comando *addPlaylist*, el comando recibe nombre , generos que va a incluir y duracion maxima, se invoca de la siguiente manera:
-   
-    node main.js addPlaylist "Mi super playlist" ['rock','cumbia','reggae'] "1200"
-
-
   #### Visualizacion de resultados
   UNQfy permite visualizar tracks, albums, artistas y playlists. Para eso puede usar los comandos *getTrackByName*, *getAlbumByName*, *getArtistByName* y *getPlaylistByName*. Estos comandos tienen como unico parametro el nombre del objeto a visualizar.
     e.g.:  
