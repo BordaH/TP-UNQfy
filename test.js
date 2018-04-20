@@ -79,16 +79,16 @@ describe('Add, remove and filter data', () => {
   it('should get all tracks matching artist', () => {
     const artist = createAndAddArtist(unqfy, 'Guns n\' Roses', 'USA');
     createAndAddAlbum(unqfy, 'Guns n\' Roses', 'Appetite for Destruction', 1987);
-    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, ['rock', 'hard rock']);
-    const t2 = createAndAddTrack(unqfy, 'Appetite for Destruction', "It's so easy", 200, ['rock', 'hard rock']);
+    const t1 = createAndAddTrack(unqfy, 'Appetite for Destruction', 'Welcome to the jungle', 200, 'rock');
+    const t2 = createAndAddTrack(unqfy, 'Appetite for Destruction', "It's so easy", 200, 'rock');
     createAndAddAlbum(unqfy, 'Guns n\' Roses', 'Use Your Illusion I', 1992);
-    const t3 = createAndAddTrack(unqfy, 'Use Your Illusion I', "Don't Cry", 500, ['rock', 'hard rock']);
+    const t3 = createAndAddTrack(unqfy, 'Use Your Illusion I', "Don't Cry", 500, 'rock');
 
     createAndAddArtist(unqfy, 'Michael Jackson', 'USA');
     createAndAddAlbum(unqfy, 'Michael Jackson', 'Thriller', 1987);
-    createAndAddTrack(unqfy, 'Thriller', 'Thriller', 200, ['pop', 'movie']);
-    createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, ['classic']);
-    createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500, ['movie']);
+    createAndAddTrack(unqfy, 'Thriller', 'Thriller', 200, 'pop', 'movie');
+    createAndAddTrack(unqfy, 'Thriller', 'Another song', 500, 'classic');
+    createAndAddTrack(unqfy, 'Thriller', 'Another song II', 500, 'movie');
 
     const matchingTracks = unqfy.getTracksMatchingArtist(artist);
 
