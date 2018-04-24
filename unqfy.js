@@ -16,7 +16,7 @@ class Playlist{
     return this.maxDuration - this.realDuration();
   }
   hasTrack(_track){
-    return this.tracks.some( (track) => track.name === _track.name);
+    return this.tracks.some( (track) => track.name.toUpperCase() === _track.name.toUpperCase());
   }
 }
 
@@ -40,7 +40,7 @@ class Album {
   }
 
   getTrackByName(_name){
-    return this.tracks.find(track => track.name === _name);
+    return this.tracks.find(track => track.name.toUpperCase() === _name.toUpperCase());
   }
   getTracks(){
     return this.tracks;
@@ -59,14 +59,14 @@ class Artist {
   }
 
   hasAlbum(_name) {
-    return this.albums.some( album => album.name === _name);
+    return this.albums.some( album => album.name.toUpperCase() === _name.toUpperCase());
   }
 
   getAlbums(){
     return this.albums;
   }
   getAlbumByName(_name){
-    return this.albums.find(album => album.name === _name);
+    return this.albums.find(album => album.name.toUpperCase() === _name.toUpperCase());
   }
   getTrackByName(_name){
     let track = undefined;
@@ -158,7 +158,7 @@ class UNQfy {
 
   getArtistByName(name) {
     const artist = this.artists.find((artist) => {
-      return artist.name === name;
+      return artist.name.toUpperCase() === name.toUpperCase();
     });
     if(artist !==undefined){
       return artist;
@@ -192,7 +192,7 @@ class UNQfy {
   }
 
   getPlaylistByName(name) {
-    const playlist =  this.playlists.find((playlist)=>{return playlist.name===name;});
+    const playlist =  this.playlists.find((playlist)=>{return playlist.name.toUpperCase()===name.toUpperCase();});
     if(playlist !==undefined){
       return playlist;
     }else{
