@@ -2,7 +2,7 @@
 
 ## Diagrama de clases
 
- ![Diagrama UML](./diagrama_uml.jpg)
+ ![Diagrama UML](./diragrama_uml.jpg)
 
 
 ## Uso de CLI
