@@ -150,7 +150,7 @@ class UNQfy {
     if(album!==undefined){
       const track = new Track(params.name,params.duration,params.genres);
       album.addTrack(track);
-      console.log(`The song was added correctly:${album.author} ${track.name}`);
+      console.log(`The song was added correctly:${track.name}`);
     }else{
       throw new ExceptionUNQfy('You can not add the track since the album ' + albumName + 'does not exist.');
     }
