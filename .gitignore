@@ -107,3 +107,9 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+# PDFs
+*.pdf
+
+#txt
+*.txt
