@@ -1,90 +1,8 @@
 const picklejs = require('picklejs');
-
-class Playlist{
-  constructor(_name,_genres,_maxDuration){
-    this.name=_name;
-    this.genres  = _genres ;
-    this.tracks =[];
-    this.maxDuration = _maxDuration;
-  }
-
-  realDuration(){
-    return this.tracks.map(t => t.duration).reduce((a, b) => a + b,0) ;
-  }
-
-  durationLeft(){
-    return this.maxDuration - this.realDuration();
-  }
-  hasTrack(_track){
-    return this.tracks.some( (track) => track.name.toUpperCase() === _track.name.toUpperCase());
-  }
-}
-
-class Track {
-  constructor(_name,_duration,_genre){
-    this.name = _name;
-    this.duration = _duration;
-    this.genre = _genre;
-  }
-}
-
-class Album {
-  constructor(_name, _year) {
-    this.name = _name;
-    this.year = _year;
-    this.tracks = [];
-  }
-
-  addTrack(track){
-    this.tracks.push(track);
-  }
-
-  getTrackByName(_name){
-    return this.tracks.find(track => track.name.toUpperCase() === _name.toUpperCase());
-  }
-  getTracks(){
-    return this.tracks;
-  }
-}
-
-class Artist {
-  constructor(_name, _country) {
-    this.name = _name;
-    this.country = _country;
-    this.albums = [];
-  }
-
-  addAlbum(album) {
-    this.albums.push(album);
-  }
-
-  hasAlbum(_name) {
-    return this.albums.some( album => album.name.toUpperCase() === _name.toUpperCase());
-  }
-
-  getAlbums(){
-    return this.albums;
-  }
-  getAlbumByName(_name){
-    return this.albums.find(album => album.name.toUpperCase() === _name.toUpperCase());
-  }
-  getTrackByName(_name){
-    let track = undefined;
-    for (let index = 0; index < this.albums.length && track ===undefined; index++) {
-      track = this.albums[index].getTrackByName(_name);
-    }
-    return track;
-  }
-
-  getTracks(){
-    let res = [];
-    for (let index = 0; index < this.albums.length; index++) {
-      res = res.concat(this.albums[index].getTracks());
-    }
-    return res;
-  }
-}
-
+const modArtist = require('./modules/artist');
+const modPlaylist = require('./modules/playlist');
+const modTrack = require('./modules/track');
+const modAlbum = require('./modules/album');
 
 class UNQfy {
 
@@ -120,7 +38,7 @@ class UNQfy {
      params.country (string)
   */
   addArtist(params) {
-    this.artists.push(new Artist(params.name, params.country));
+    this.artists.push(new modArtist.Artist(params.name, params.country));
     console.log('The artist was added correctly');
   }
 
@@ -132,7 +50,7 @@ class UNQfy {
   addAlbum(artistName, params) {
     const author = this.getArtistByName(artistName);
     if(author!==undefined){
-      const album = new Album(params.name, params.year);
+      const album = new modAlbum.Album(params.name, params.year);
       author.addAlbum(album);
       console.log(`The album was added correctly:${album.name}`);
     }else{
@@ -148,7 +66,7 @@ class UNQfy {
   addTrack(albumName, params) {
     const album = this.getAlbumByName(albumName);
     if(album!==undefined){
-      const track = new Track(params.name,params.duration,params.genres);
+      const track = new modTrack.Track(params.name,params.duration,params.genres);
       album.addTrack(track);
       console.log(`The song was added correctly:${track.name}`);
     }else{
@@ -206,7 +124,7 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist
     */
-    const playlist = new Playlist(name,genresToInclude,maxDuration);
+    const playlist = new modPlaylist.Playlist(name,genresToInclude,maxDuration);
     while(this.canAddTrackTo(playlist)){
       this.addTrackTo(playlist);
     }
@@ -240,7 +158,7 @@ class UNQfy {
   static load(filename = 'unqfy.json') {
     const fs = new picklejs.FileSerializer();
     // TODO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, Artist, Track, Album, Playlist];
+    const classes = [UNQfy, modArtist.Artist, modTrack.Track, modAlbum.Album, modPlaylist.Playlist];
     fs.registerClasses(...classes);
     return fs.load(filename);
   }
