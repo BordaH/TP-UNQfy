@@ -1,28 +1,39 @@
 const picklejs = require('picklejs');
+const rp = require('request-promise');
 const modArtist = require('./modules/artist');
 const modPlaylist = require('./modules/playlist');
 const modTrack = require('./modules/track');
 const modAlbum = require('./modules/album');
 
 class UNQfy {
-
+  
   constructor() {
     this.artists = [];
     this.playlists = [];
   }
+  
+  getOptions(endPoint,params){
+    return {
+      url: endPoint,
+      headers: {
+        Authorization: 'Bearer ' + 'BQAypIE3CH7LBTbmAVWaVO8eGZSlRfWx57ypm_v5wV1bgA_9yWi9XRbUkYKb76rsJ2kGhzKnff-vo2VFSADJdclLpNnJIkEqRi1KMjpCCJqUXQazepOlv1WV_6Zccdc_2q9Dc8YIeiccLHpRG0kUB6ajpeU3qyiIdYfNRIKZjnYtMxdiO_yVjw'
+      }, json: true,
+      qs:params,
+    };
+  }
 
-  getTracksMatchingGenres(genres){
+  getTracksMatchingGenres(genres) {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
     const res = [];
     this.getTracks().forEach(element => {
-      if(genres.includes(element.genre)){
+      if (genres.includes(element.genre)) {
         res.push(element);
       }
     });
     return res;
   }
 
-  getTracks(){
+  getTracks() {
     let res = this.artists[0].getTracks();
     for (let index = 1; index < this.artists.length; index++) {
       res = res.concat(this.artists[index].getTracks());
@@ -49,11 +60,11 @@ class UNQfy {
   */
   addAlbum(artistName, params) {
     const author = this.getArtistByName(artistName);
-    if(author!==undefined){
+    if (author !== undefined) {
       const album = new modAlbum.Album(params.name, params.year);
       author.addAlbum(album);
       console.log(`The album was added correctly:${album.name}`);
-    }else{
+    } else {
       throw new ExceptionUNQfy('You can not add the album since the artist ' + artistName + ' does not exist');
     }
   }
@@ -65,11 +76,11 @@ class UNQfy {
   */
   addTrack(albumName, params) {
     const album = this.getAlbumByName(albumName);
-    if(album!==undefined){
-      const track = new modTrack.Track(params.name,params.duration,params.genres);
+    if (album !== undefined) {
+      const track = new modTrack.Track(params.name, params.duration, params.genres);
       album.addTrack(track);
       console.log(`The song was added correctly:${track.name}`);
-    }else{
+    } else {
       throw new ExceptionUNQfy('You can not add the track since the album ' + albumName + 'does not exist.');
     }
   }
@@ -78,42 +89,42 @@ class UNQfy {
     const artist = this.artists.find((artist) => {
       return artist.name.toUpperCase() === name.toUpperCase();
     });
-    if(artist !==undefined){
+    if (artist !== undefined) {
       return artist;
-    }else{
+    } else {
       throw new ExceptionUNQfy('There is no named artist ' + name);
     }
   }
 
   getAlbumByName(name) {
     let album = undefined;
-    for (let index = 0; index < this.artists.length && album===undefined; index++) {
+    for (let index = 0; index < this.artists.length && album === undefined; index++) {
       album = this.artists[index].getAlbumByName(name);
     }
-    if(album !==undefined){
+    if (album !== undefined) {
       return album;
-    }else{
+    } else {
       throw new ExceptionUNQfy('There is no named album ' + name);
     }
   }
 
   getTrackByName(name) {
     let track = undefined;
-    for (let index = 0; (index < this.artists.length && track===undefined); index++) {
+    for (let index = 0; (index < this.artists.length && track === undefined); index++) {
       track = this.artists[index].getTrackByName(name);
     }
-    if(track !==undefined){
+    if (track !== undefined) {
       return track;
-    }else{
+    } else {
       throw new ExceptionUNQfy(`There is no named track ${name}`);
     }
   }
 
   getPlaylistByName(name) {
-    const playlist =  this.playlists.find((playlist)=>{return playlist.name.toUpperCase()===name.toUpperCase();});
-    if(playlist !==undefined){
+    const playlist = this.playlists.find((playlist) => { return playlist.name.toUpperCase() === name.toUpperCase(); });
+    if (playlist !== undefined) {
       return playlist;
-    }else{
+    } else {
       throw new ExceptionUNQfy('There is no named playlist ' + name);
     }
   }
@@ -124,31 +135,59 @@ class UNQfy {
       * un metodo duration() que retorne la duración de la playlist.
       * un metodo hasTrack(aTrack) que retorna true si aTrack se encuentra en la playlist
     */
-    const playlist = new modPlaylist.Playlist(name,genresToInclude,maxDuration);
-    while(this.canAddTrackTo(playlist)){
+    const playlist = new modPlaylist.Playlist(name, genresToInclude, maxDuration);
+    while (this.canAddTrackTo(playlist)) {
       this.addTrackTo(playlist);
     }
     this.playlists.push(playlist);
     console.log('The playlist was added correctly');
   }
 
-  canAddTrackTo(playlist){
-    return  this.areTracksLeftFor(playlist);
+  canAddTrackTo(playlist) {
+    return this.areTracksLeftFor(playlist);
   }
 
-  isValidTrack(track,playlist){
-    return !playlist.hasTrack(track)&& track.duration <= playlist.durationLeft();
+  isValidTrack(track, playlist) {
+    return !playlist.hasTrack(track) && track.duration <= playlist.durationLeft();
   }
-  trackToBeAdded(playlist){
-    return this.getTracksMatchingGenres(playlist.genres).find((track) => playlist.genres.includes(track.genre) && this.isValidTrack(track,playlist));
-  }
-
-  areTracksLeftFor(playlist){
-    return this.getTracksMatchingGenres(playlist.genres).some((track) => this.isValidTrack(track,playlist));
+  trackToBeAdded(playlist) {
+    return this.getTracksMatchingGenres(playlist.genres).find((track) => playlist.genres.includes(track.genre) && this.isValidTrack(track, playlist));
   }
 
-  addTrackTo(playlist){
+  areTracksLeftFor(playlist) {
+    return this.getTracksMatchingGenres(playlist.genres).some((track) => this.isValidTrack(track, playlist));
+  }
+
+  addTrackTo(playlist) {
     playlist.tracks.push(this.trackToBeAdded(playlist));
+  }
+  
+  populateAlbumsForArtist(artistName){
+    return this.getArtisSpotifyId(artistName)
+      .then((response) => this.getArtistSpotifyAlbums(response.artistId));
+      //.then((response)=> this.addAlbum(response.artistName,response.params));
+  }
+
+  //TODO: ver si los siguientes metodos se pueden pasar a un modulo
+
+  getArtisSpotifyId(artistName){
+    const qs = {
+      q : artistName,
+      type : 'artist',
+    };
+    const options = this.getOptions('https://api.spotify.com/v1/search',qs);
+    return rp(options).then((response)=>{
+      return {
+        artistName : artistName,
+        artistId: response.artists.items[0].id,
+      };
+    } );
+  }
+
+  getArtistSpotifyAlbums(id){
+    console.log(id);
+    const options = this.getOptions(`https://api.spotify.com/v1/artists/${id}/albums`);
+    return rp(options).then(response => console.log(response.items));
   }
 
   save(filename = 'unqfy.json') {

@@ -58,6 +58,9 @@ function main() {
   case 'getPlaylistByName':
     console.log(unqfy.getPlaylistByName(argumentos[1]));
     break;
+  case 'testSpotify':
+    unqfy.populateAlbumsForArtist('Queen');
+    break;
   default:
     console.log('Sorry, that is not something I know how to do.');
   }
