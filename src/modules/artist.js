@@ -8,6 +8,9 @@ class Artist {
   addAlbum(album) {
     this.albums.push(album);
   }
+  addAlbums(albums){
+    albums.forEach(album => this.addAlbum(album));
+  }
 
   hasAlbum(_name) {
     return this.albums.some( album => album.name.toUpperCase() === _name.toUpperCase());

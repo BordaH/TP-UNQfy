@@ -6,19 +6,19 @@ const modTrack = require('./modules/track');
 const modAlbum = require('./modules/album');
 
 class UNQfy {
-  
+
   constructor() {
     this.artists = [];
     this.playlists = [];
   }
-  
-  getOptions(endPoint,params){
+
+  getOptions(endPoint, params) {
     return {
       url: endPoint,
       headers: {
-        Authorization: 'Bearer ' + 'BQAypIE3CH7LBTbmAVWaVO8eGZSlRfWx57ypm_v5wV1bgA_9yWi9XRbUkYKb76rsJ2kGhzKnff-vo2VFSADJdclLpNnJIkEqRi1KMjpCCJqUXQazepOlv1WV_6Zccdc_2q9Dc8YIeiccLHpRG0kUB6ajpeU3qyiIdYfNRIKZjnYtMxdiO_yVjw'
+        Authorization: 'Bearer ' + 'BQCZV6LIMlkKoBWESZJw67uPbR5giWErWWAOrF_xwR79GRPf3jqwd3ExCLkE25InpKApzSCSg179HEqwAVI1PsST2MaF1XTy5cXhm-U__VF47hF0gQWBF6CqUS-zxztPDkgrUTqN0OufRzRWUae5esKiNMa43WQqsIoqCr5uZarifmxMzBVpuw'
       }, json: true,
-      qs:params,
+      qs: params,
     };
   }
 
@@ -63,7 +63,7 @@ class UNQfy {
     if (author !== undefined) {
       const album = new modAlbum.Album(params.name, params.year);
       author.addAlbum(album);
-      console.log(`The album was added correctly:${album.name}`);
+      console.log(`The album was added correctly: ${album.name}`);
     } else {
       throw new ExceptionUNQfy('You can not add the album since the artist ' + artistName + ' does not exist');
     }
@@ -161,33 +161,53 @@ class UNQfy {
   addTrackTo(playlist) {
     playlist.tracks.push(this.trackToBeAdded(playlist));
   }
-  
-  populateAlbumsForArtist(artistName){
+  populateAlbumsForArtist(artistName) {
     return this.getArtisSpotifyId(artistName)
-      .then((response) => this.getArtistSpotifyAlbums(response.artistId));
-      //.then((response)=> this.addAlbum(response.artistName,response.params));
+      .then(response => this.getArtistSpotifyAlbums(response))
+      .then(response => this.addAlbumsToArtist(response.artistName, response.albums));
+  }
+
+  addAlbumsToArtist(artistName, albums) {
+    const myArtist = this.getArtistByName(artistName);
+    const mappedAlbums = albums.map(album => {
+      const albumYear = album.release_date.split('-')[0];
+      return { name: album.name, year: albumYear };
+    });
+
+    myArtist.addAlbums(mappedAlbums);
+    console.log(`Hemos agregado ${mappedAlbums.length} albums para el artista ${artistName}`);
+    // albums.forEach(album => this.addAlbum(artistName, { name: album.name, year: album.release_date.split('-')[0] }));
+    return this;
   }
 
   //TODO: ver si los siguientes metodos se pueden pasar a un modulo
 
-  getArtisSpotifyId(artistName){
+  getArtisSpotifyId(artistName) {
     const qs = {
-      q : artistName,
-      type : 'artist',
+      q: artistName,
+      type: 'artist',
     };
-    const options = this.getOptions('https://api.spotify.com/v1/search',qs);
-    return rp(options).then((response)=>{
+    const options = this.getOptions('https://api.spotify.com/v1/search', qs);
+    return rp(options).then((response) => {
       return {
-        artistName : artistName,
+        artistName: artistName,
         artistId: response.artists.items[0].id,
+        albums: undefined,
       };
-    } );
+    });
   }
 
-  getArtistSpotifyAlbums(id){
-    console.log(id);
-    const options = this.getOptions(`https://api.spotify.com/v1/artists/${id}/albums`);
-    return rp(options).then(response => console.log(response.items));
+  /**
+  * 
+  * 
+  * @param {*} artistData {artistId: <spotifyId>,artistName:<nombreDeArtista>}
+  */
+  getArtistSpotifyAlbums(artistData) {
+    const options = this.getOptions(`https://api.spotify.com/v1/artists/${artistData.artistId}/albums`);
+    return rp(options).then(response => {
+      artistData.albums = response.items;
+      return artistData;
+    });
   }
 
   save(filename = 'unqfy.json') {
