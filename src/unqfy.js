@@ -21,7 +21,13 @@ class UNQfy {
       qs: params,
     };
   }
-
+  getOptionsMusixMatch(endPoint,params){
+    return {
+      url: endPoint,
+      json: true,
+      qs: params,
+    };
+  }
   getTracksMatchingGenres(genres) {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
     const res = [];
@@ -161,10 +167,55 @@ class UNQfy {
   addTrackTo(playlist) {
     playlist.tracks.push(this.trackToBeAdded(playlist));
   }
+
   populateAlbumsForArtist(artistName) {
     return this.getArtisSpotifyId(artistName)
       .then(response => this.getArtistSpotifyAlbums(response))
       .then(response => this.addAlbumsToArtist(response.artistName, response.albums));
+  }
+
+  getLyrics(trackName){
+    const track = this.getTrackByName(trackName);
+    if(track.getLyrics()===''){
+      return this.getTrackMusixMatchId(trackName)
+      .then(response=> this.getLyricsMusixMatch(response))
+      .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
+    }else{
+      return track.getLyrics();
+    }
+  }
+
+  getTrackMusixMatchId(trackName){
+    const qs = {
+      apikey: '7ab213372c050ee9af2edf49abe86257',
+      q_track: trackName,
+    };
+    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.search', qs);
+    return rp(options).then((response) => {
+      return {
+        track_name: trackName,
+        track_id: response.message.body.track_list[0].track.track_id,
+        lyrics: undefined,  
+      };
+    });
+  }
+
+  getLyricsMusixMatch(trackData){
+    const qs = {
+      apikey: '7ab213372c050ee9af2edf49abe86257',
+      track_id: trackData.track_id,
+    };
+    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.lyrics.get', qs);
+    return rp(options).then(response => {
+      trackData.lyrics = response.message.body.lyrics.lyrics_body;
+      return trackData;
+    });
+  }
+
+  addLyricsToTrack(trackName,lyrics){
+    this.getTrackByName(trackName).addLyrics(lyrics);
+    console.log(`Hemos agregado la letra para el track ${trackName}`);
+    return this;
   }
 
   addAlbumsToArtist(artistName, albums) {

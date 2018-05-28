@@ -61,6 +61,9 @@ function main() {
   case 'testSpotify':
     unqfy.populateAlbumsForArtist('Queen').then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
     break;
+  case 'testMusixMatch':
+    unqfy.getLyrics('Got U Slippin').then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
+    break;  
   default:
     console.log('Sorry, that is not something I know how to do.');
   }
