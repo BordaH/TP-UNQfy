@@ -224,7 +224,9 @@ class UNQfy {
         .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
     }else{
       console.log(track.getLyrics());
+      /*eslint-disable*/
       return new Promise((resolve,reject) => resolve(this));
+      /*eslint-enable*/
     }
   }
 
