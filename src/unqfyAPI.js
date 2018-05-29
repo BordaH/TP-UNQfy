@@ -22,8 +22,6 @@ function saveUNQfy(unqfy, filename) {
   unqfy.save(filename);
 }
 
-const unqfy = getUNQfy('unqfy.txt');
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/api', router);
@@ -31,15 +29,23 @@ app.use('/api', router);
 
 
 router.route('/artists').post((req,res) => {  
+  const unqfy = getUNQfy('unqfy.txt');
   unqfy.addArtist({name :req.body.name,country: req.body.country});
   saveUNQfy(unqfy,'unqfy.txt');
   res.json(unqfy.getArtistByName(req.body.name));
-});
+})
+  .get((req,res) => {      
+    const unqfy = getUNQfy('unqfy.txt');
+    if(req.query.name)
+      res.json(unqfy.searchArtistByName(req.query.name));
+  });
 
 router.route('/artists/:id').get((req,res)=> {
+  const unqfy = getUNQfy('unqfy.txt');
   res.json(unqfy.getArtistByID(parseInt( req.params.id)));
 })
-  .delete((req,res)=> {
+  .delete((req,res)=> {  
+    const unqfy = getUNQfy('unqfy.txt');
     unqfy.deleteArtistByID(parseInt( req.params.id));
     saveUNQfy(unqfy,'unqfy.txt');
     res.status(200);

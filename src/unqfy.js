@@ -51,6 +51,10 @@ class UNQfy {
   getTracksMatchingArtist(artistName) {
     return this.getArtistByName(artistName.name).getTracks();
   }
+
+  searchArtistByName(name){
+    return this.artists.filter(a => a.name.toUpperCase().includes(name.toUpperCase()));
+  }
   /* Debe soportar al menos:
      params.name (string)
      params.country (string)
