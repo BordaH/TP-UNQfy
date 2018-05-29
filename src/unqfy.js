@@ -181,7 +181,8 @@ class UNQfy {
       .then(response=> this.getLyricsMusixMatch(response))
       .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
     }else{
-      return track.getLyrics();
+      console.log(track.getLyrics());
+      return new Promise((resolve,reject) => resolve(this));
     }
   }
 
