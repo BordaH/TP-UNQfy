@@ -72,7 +72,7 @@ class UNQfy {
   addAlbum(artistName, params) {
     const author = this.getArtistByName(artistName);
     if (author !== undefined) {
-      const album = new modAlbum.Album(params.name, params.year);
+      const album = new modAlbum.Album(params.name, params.year,this.nextID++);
       author.addAlbum(album);
       console.log(`The album was added correctly: ${album.name}`);
     } else {
@@ -104,6 +104,16 @@ class UNQfy {
       return artist;
     } else {
       throw new ExceptionUNQfy('There is no named artist ' + name);
+    }
+  }
+
+  getAlbumByID(id){
+    const artist = this.artists.find(a=>a.hasAlbumByID(id));
+  
+    if (artist !== undefined) {
+      return artist.getAlbumByID(id);
+    } else {
+      throw new ExceptionUNQfy('There is no album with id: ' + id);
     }
   }
 

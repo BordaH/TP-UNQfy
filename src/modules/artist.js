@@ -16,6 +16,9 @@ class Artist {
   hasAlbum(_name) {
     return this.albums.some( album => album.name.toUpperCase() === _name.toUpperCase());
   }
+  hasAlbumByID(_id) {
+    return this.albums.some(album => album.id === _id);
+  }
 
   getAlbums(){
     return this.albums;
@@ -29,6 +32,9 @@ class Artist {
       track = this.albums[index].getTrackByName(_name);
     }
     return track;
+  }
+  getAlbumByID(id){
+    return this.albums.find(album => album.id === id);
   }
 
   getTracks(){
