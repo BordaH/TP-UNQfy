@@ -58,11 +58,11 @@ function main() {
   case 'getPlaylistByName':
     console.log(unqfy.getPlaylistByName(argumentos[1]));
     break;
-  case 'testSpotify':
-    unqfy.populateAlbumsForArtist('Queen').then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
+  case 'populateAlbumsForArtist':
+    unqfy.populateAlbumsForArtist(argumentos[1]).then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
     break;
-  case 'testMusixMatch':
-    unqfy.getLyrics('Got U Slippin').then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
+  case 'getLyrics':
+    unqfy.getLyrics(argumentos[1]).then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
     break;  
   default:
     console.log('Sorry, that is not something I know how to do.');
