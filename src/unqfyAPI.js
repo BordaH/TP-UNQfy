@@ -36,6 +36,10 @@ router.route('/artists').post((req,res) => {
   res.json(unqfy.getArtistByName(req.body.name));
 });
 
+router.route('/artists/:id').get((req,res)=> {
+  res.json(unqfy.getArtistByID(parseInt( req.params.id)));
+});
+
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });
 });

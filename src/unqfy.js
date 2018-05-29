@@ -103,6 +103,19 @@ class UNQfy {
     }
   }
 
+  getArtistByID(id) {
+    const artist = this.artists.find((artist) => {
+      return artist.id === id;
+    });
+    if (artist !== undefined) {
+      return artist;
+    } else {
+      throw new ExceptionUNQfy('There is no artist with id: ' + id);
+    }
+  }
+
+
+
   getAlbumByName(name) {
     let album = undefined;
     for (let index = 0; index < this.artists.length && album === undefined; index++) {
