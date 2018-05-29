@@ -38,7 +38,13 @@ router.route('/artists').post((req,res) => {
 
 router.route('/artists/:id').get((req,res)=> {
   res.json(unqfy.getArtistByID(parseInt( req.params.id)));
-});
+})
+  .delete((req,res)=> {
+    unqfy.deleteArtistByID(parseInt( req.params.id));
+    saveUNQfy(unqfy,'unqfy.txt');
+    res.status(200);
+    res.end();
+  });
 
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });

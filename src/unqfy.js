@@ -114,6 +114,11 @@ class UNQfy {
     }
   }
 
+  deleteArtistByID(id){
+    const newList = this.artists.filter(artist => artist.id !== id);
+    this.artists = newList;
+  }
+
 
 
   getAlbumByName(name) {
