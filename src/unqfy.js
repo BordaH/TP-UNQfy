@@ -8,6 +8,7 @@ const modAlbum = require('./modules/album');
 class UNQfy {
 
   constructor() {
+    this.nextID = 1;
     this.artists = [];
     this.playlists = [];
   }
@@ -16,7 +17,7 @@ class UNQfy {
     return {
       url: endPoint,
       headers: {
-        Authorization: 'Bearer ' + 'BQCZV6LIMlkKoBWESZJw67uPbR5giWErWWAOrF_xwR79GRPf3jqwd3ExCLkE25InpKApzSCSg179HEqwAVI1PsST2MaF1XTy5cXhm-U__VF47hF0gQWBF6CqUS-zxztPDkgrUTqN0OufRzRWUae5esKiNMa43WQqsIoqCr5uZarifmxMzBVpuw'
+        Authorization: 'Bearer ' + 'BQB3A0GQ8wBOQDOku30cqimokFTgjdKG1I8mv2kAzWvVTQLm99PhPFpydkYeFUbsSvR3PwtDOKX0xsQbW0m3gKOCDVKuXBajzoS9qnWpyHcFKo2zUjfsVcU0Mo9Mz3oQAwLzCPP76MS5_YggQ0jhB019IbjpC3CS2LdshY5hmZXpQLk38-0Y7g'
       }, json: true,
       qs: params,
     };
@@ -55,7 +56,7 @@ class UNQfy {
      params.country (string)
   */
   addArtist(params) {
-    this.artists.push(new modArtist.Artist(params.name, params.country));
+    this.artists.push(new modArtist.Artist(params.name, params.country,this.nextID++));
     console.log('The artist was added correctly');
   }
 
@@ -178,8 +179,8 @@ class UNQfy {
     const track = this.getTrackByName(trackName);
     if(track.getLyrics()===''){
       return this.getTrackMusixMatchId(trackName)
-      .then(response=> this.getLyricsMusixMatch(response))
-      .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
+        .then(response=> this.getLyricsMusixMatch(response))
+        .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
     }else{
       console.log(track.getLyrics());
       return new Promise((resolve,reject) => resolve(this));

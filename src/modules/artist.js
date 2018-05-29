@@ -1,8 +1,9 @@
 class Artist {
-  constructor(_name, _country) {
+  constructor(_name, _country,_id) {
     this.name = _name;
     this.country = _country;
     this.albums = [];
+    this.id = _id;
   }
 
   addAlbum(album) {
