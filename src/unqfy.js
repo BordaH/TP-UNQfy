@@ -4,6 +4,9 @@ const modArtist = require('./modules/artist');
 const modPlaylist = require('./modules/playlist');
 const modTrack = require('./modules/track');
 const modAlbum = require('./modules/album');
+const spotifymod = require('./modules/spotifyAPI');
+
+const spotifyAPI = new spotifymod.SpotifyAPI();
 
 class UNQfy {
 
@@ -13,15 +16,6 @@ class UNQfy {
     this.playlists = [];
   }
 
-  getOptions(endPoint, params) {
-    return {
-      url: endPoint,
-      headers: {
-        Authorization: 'Bearer ' + 'BQB3A0GQ8wBOQDOku30cqimokFTgjdKG1I8mv2kAzWvVTQLm99PhPFpydkYeFUbsSvR3PwtDOKX0xsQbW0m3gKOCDVKuXBajzoS9qnWpyHcFKo2zUjfsVcU0Mo9Mz3oQAwLzCPP76MS5_YggQ0jhB019IbjpC3CS2LdshY5hmZXpQLk38-0Y7g'
-      }, json: true,
-      qs: params,
-    };
-  }
   getOptionsMusixMatch(endPoint,params){
     return {
       url: endPoint,
@@ -211,8 +205,8 @@ class UNQfy {
   }
 
   populateAlbumsForArtist(artistName) {
-    return this.getArtisSpotifyId(artistName)
-      .then(response => this.getArtistSpotifyAlbums(response))
+    return spotifyAPI.getArtisSpotifyId(artistName)
+      .then(response => spotifyAPI.getArtistSpotifyAlbums(response))
       .then(response => this.addAlbumsToArtist(response.artistName, response.albums));
   }
 
@@ -274,36 +268,6 @@ class UNQfy {
     console.log(`Hemos agregado ${mappedAlbums.length} albums para el artista ${artistName}`);
     // albums.forEach(album => this.addAlbum(artistName, { name: album.name, year: album.release_date.split('-')[0] }));
     return this;
-  }
-
-  //TODO: ver si los siguientes metodos se pueden pasar a un modulo
-
-  getArtisSpotifyId(artistName) {
-    const qs = {
-      q: artistName,
-      type: 'artist',
-    };
-    const options = this.getOptions('https://api.spotify.com/v1/search', qs);
-    return rp(options).then((response) => {
-      return {
-        artistName: artistName,
-        artistId: response.artists.items[0].id,
-        albums: undefined,
-      };
-    });
-  }
-
-  /**
-  * 
-  * 
-  * @param {*} artistData {artistId: <spotifyId>,artistName:<nombreDeArtista>}
-  */
-  getArtistSpotifyAlbums(artistData) {
-    const options = this.getOptions(`https://api.spotify.com/v1/artists/${artistData.artistId}/albums`);
-    return rp(options).then(response => {
-      artistData.albums = response.items;
-      return artistData;
-    });
   }
 
   save(filename = 'unqfy.json') {
