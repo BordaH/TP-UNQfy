@@ -55,6 +55,12 @@ class UNQfy {
   searchArtistByName(name){
     return this.artists.filter(a => a.name.toUpperCase().includes(name.toUpperCase()));
   }
+
+  searchAlbumByName(name){
+    let list=[];
+    this.artists.forEach(a=>a.getAlbumsByName(list,name));
+    return list;
+  }
   /* Debe soportar al menos:
      params.name (string)
      params.country (string)
@@ -133,7 +139,10 @@ class UNQfy {
     this.artists = newList;
   }
 
-
+  deleteAlbumByID(id){
+    const artist = this.artists.find(a=>a.hasAlbumByID(id));
+    artist.deleteAlbumByID(id);
+  }
 
   getAlbumByName(name) {
     let album = undefined;

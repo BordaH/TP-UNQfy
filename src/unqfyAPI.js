@@ -51,19 +51,30 @@ router.route('/artists/:id').get((req,res)=> {
     res.status(200);
     res.end();
   });
-
-  router.route('/albums').post((req,res)=>{
+router.route('/albums').post((req,res)=>{
+  const unqfy = getUNQfy('unqfy.txt');
+  const artist = unqfy.getArtistByID(req.body.artistId);
+  unqfy.addAlbum(artist.name,{name :req.body.name,year: req.body.year});
+  saveUNQfy(unqfy,'unqfy.txt');
+  res.json(unqfy.getAlbumByName(req.body.name));
+})
+  .get((req,res) => {      
     const unqfy = getUNQfy('unqfy.txt');
-    const artist = unqfy.getArtistByID(req.body.artistId);
-    unqfy.addAlbum(artist.name,{name :req.body.name,year: req.body.year});
+    if(req.query.name)
+      res.json(unqfy.searchAlbumByName(req.query.name));
+});
+
+router.route('/albums/:id').get((req,res)=>{
+  const unqfy = getUNQfy('unqfy.txt');
+  res.json(unqfy.getAlbumByID(parseInt(req.params.id)));
+})
+  .delete((req,res)=>{
+    const unqfy = getUNQfy('unqfy.txt');
+    unqfy.deleteAlbumByID(parseInt(req.params.id));
     saveUNQfy(unqfy,'unqfy.txt');
-    res.json(unqfy.getAlbumByName(req.body.name));
-  });
-
-  router.route('/albums/:id').get((req,res)=>{
-    const unqfy = getUNQfy('unqfy.txt');
-    res.json(unqfy.getAlbumByID(parseInt(req.params.id)));
-  });
+    res.status(200);
+    res.end();
+});
 
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });

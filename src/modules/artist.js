@@ -44,6 +44,15 @@ class Artist {
     }
     return res;
   }
+  deleteAlbumByID(id){
+    const newList = this.albums.filter(a=>a.id!==id);
+    this.albums =newList;
+  }
+
+  getAlbumsByName(list,name){
+    this.albums.forEach(a=>{if(a.name.toUpperCase().includes(name.toUpperCase()))
+    {list.push(a);}});
+  }
 }
 
 module.exports = {
