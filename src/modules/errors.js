@@ -29,8 +29,12 @@ function errorHandler(err, req, res, next) {
   if (err instanceof APIError){
     res.status(err.statusCode);
     res.json({status: err.statusCode, errorCode: err.errorCode});
-  } else {
-  // continua con el manejador de errores por defecto
+  }else if (err.type === 'entity.parse.failed'){
+    // body-parser error para JSON invalido
+    res.status(err.status);
+    res.json({status: 400, errorCode: 'INVALID_JSON'});
+    } else {
+    // continua con el manejador de errores por defecto
     next(err);
   }
 }
