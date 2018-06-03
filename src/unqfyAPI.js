@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');  
 const bodyParser = require('body-parser');
 const unqmod = require('./unqfy');
+const errors = require('./modules/errors');
 
 const app = express();          
 const router = express.Router();
@@ -40,9 +41,16 @@ router.route('/artists').post((req,res) => {
       res.json(unqfy.searchArtistByName(req.query.name));
   });
 
-router.route('/artists/:id').get((req,res)=> {
+router.route('/artists/:id').get((req,res,next)=> {
   const unqfy = getUNQfy('unqfy.txt');
-  res.json(unqfy.getArtistByID(parseInt( req.params.id)));
+  try {
+    res.json(unqfy.getArtistByID(parseInt( req.params.id)));
+  } catch (error) {
+    if (error.message.includes('no artist'))
+      next(new errors.ResourceNotFound());
+    else
+      next(error);
+  }
 })
   .delete((req,res)=> {  
     const unqfy = getUNQfy('unqfy.txt');
@@ -62,7 +70,7 @@ router.route('/albums').post((req,res)=>{
     const unqfy = getUNQfy('unqfy.txt');
     if(req.query.name)
       res.json(unqfy.searchAlbumByName(req.query.name));
-});
+  });
 
 router.route('/albums/:id').get((req,res)=>{
   const unqfy = getUNQfy('unqfy.txt');
@@ -74,12 +82,12 @@ router.route('/albums/:id').get((req,res)=>{
     saveUNQfy(unqfy,'unqfy.txt');
     res.status(200);
     res.end();
-});
+  });
 
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });
 });
 
 
-
+app.use(errors.errorHandler);
 app.listen(port);
