@@ -46,7 +46,7 @@ router.route('/artists/:id').get((req,res,next)=> {
   try {
     res.json(unqfy.getArtistByID(parseInt( req.params.id)));
   } catch (error) {
-    if (error.message.includes('no artist'))
+    if (error instanceof unqmod.ExceptionUNQfy)
       next(new errors.ResourceNotFound());
     else
       next(error);
@@ -72,9 +72,17 @@ router.route('/albums').post((req,res)=>{
       res.json(unqfy.searchAlbumByName(req.query.name));
   });
 
-router.route('/albums/:id').get((req,res)=>{
+router.route('/albums/:id').get((req,res,next)=>{
   const unqfy = getUNQfy('unqfy.txt');
-  res.json(unqfy.getAlbumByID(parseInt(req.params.id)));
+  try {
+    res.json(unqfy.getAlbumByID(parseInt(req.params.id)));
+    
+  } catch (error) {
+    if (error instanceof unqmod.ExceptionUNQfy)
+      next(new errors.ResourceNotFound());
+    else
+      next(error);  
+  }
 })
   .delete((req,res)=>{
     const unqfy = getUNQfy('unqfy.txt');

@@ -282,15 +282,16 @@ class UNQfy {
     return fs.load(filename);
   }
 }
-// TODO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
-module.exports = {
-  UNQfy,
-};
-
 class ExceptionUNQfy {
   constructor(message) {
     this.message = message;
     this.name = 'ExceptionUNQfy';
   }
 }
+// TODO: exportar todas las clases que necesiten ser utilizadas desde un modulo cliente
+module.exports = {
+  UNQfy,
+  ExceptionUNQfy
+};
+
 
