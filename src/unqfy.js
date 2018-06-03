@@ -16,7 +16,7 @@ class UNQfy {
     this.playlists = [];
   }
 
-  getOptionsMusixMatch(endPoint,params){
+  getOptionsMusixMatch(endPoint, params) {
     return {
       url: endPoint,
       json: true,
@@ -46,13 +46,13 @@ class UNQfy {
     return this.getArtistByName(artistName.name).getTracks();
   }
 
-  searchArtistByName(name){
+  searchArtistByName(name) {
     return this.artists.filter(a => a.name.toUpperCase().includes(name.toUpperCase()));
   }
 
-  searchAlbumByName(name){
-    let list=[];
-    this.artists.forEach(a=>a.getAlbumsByName(list,name));
+  searchAlbumByName(name) {
+    const list = [];
+    this.artists.forEach(a => a.getAlbumsByName(list, name));
     return list;
   }
   /* Debe soportar al menos:
@@ -60,8 +60,12 @@ class UNQfy {
      params.country (string)
   */
   addArtist(params) {
-    this.artists.push(new modArtist.Artist(params.name, params.country,this.nextID++));
-    console.log('The artist was added correctly');
+    if (!this.artists.some(a => a.name === params.name)) {
+      this.artists.push(new modArtist.Artist(params.name, params.country, this.nextID++));
+      console.log('The artist was added correctly');
+    }
+    else
+      throw new ExceptionUNQfy('The artist already exists');
   }
 
 
@@ -72,7 +76,7 @@ class UNQfy {
   addAlbum(artistName, params) {
     const author = this.getArtistByName(artistName);
     if (author !== undefined) {
-      const album = new modAlbum.Album(params.name, params.year,this.nextID++);
+      const album = new modAlbum.Album(params.name, params.year, this.nextID++);
       author.addAlbum(album);
       console.log(`The album was added correctly: ${album.name}`);
     } else {
@@ -107,9 +111,9 @@ class UNQfy {
     }
   }
 
-  getAlbumByID(id){
-    const artist = this.artists.find(a=>a.hasAlbumByID(id));
-  
+  getAlbumByID(id) {
+    const artist = this.artists.find(a => a.hasAlbumByID(id));
+
     if (artist !== undefined) {
       return artist.getAlbumByID(id);
     } else {
@@ -128,13 +132,13 @@ class UNQfy {
     }
   }
 
-  deleteArtistByID(id){
+  deleteArtistByID(id) {
     const newList = this.artists.filter(artist => artist.id !== id);
     this.artists = newList;
   }
 
-  deleteAlbumByID(id){
-    const artist = this.artists.find(a=>a.hasAlbumByID(id));
+  deleteAlbumByID(id) {
+    const artist = this.artists.find(a => a.hasAlbumByID(id));
     artist.deleteAlbumByID(id);
   }
 
@@ -210,21 +214,21 @@ class UNQfy {
       .then(response => this.addAlbumsToArtist(response.artistName, response.albums));
   }
 
-  getLyrics(trackName){
+  getLyrics(trackName) {
     const track = this.getTrackByName(trackName);
-    if(track.getLyrics()===''){
+    if (track.getLyrics() === '') {
       return this.getTrackMusixMatchId(trackName)
-        .then(response=> this.getLyricsMusixMatch(response))
-        .then(response=>this.addLyricsToTrack(trackName,response.lyrics));
-    }else{
+        .then(response => this.getLyricsMusixMatch(response))
+        .then(response => this.addLyricsToTrack(trackName, response.lyrics));
+    } else {
       console.log(track.getLyrics());
       /*eslint-disable*/
-      return new Promise((resolve,reject) => resolve(this));
+      return new Promise((resolve, reject) => resolve(this));
       /*eslint-enable*/
     }
   }
 
-  getTrackMusixMatchId(trackName){
+  getTrackMusixMatchId(trackName) {
     const qs = {
       apikey: '7ab213372c050ee9af2edf49abe86257',
       q_track: trackName,
@@ -234,12 +238,12 @@ class UNQfy {
       return {
         track_name: trackName,
         track_id: response.message.body.track_list[0].track.track_id,
-        lyrics: undefined,  
+        lyrics: undefined,
       };
     });
   }
 
-  getLyricsMusixMatch(trackData){
+  getLyricsMusixMatch(trackData) {
     const qs = {
       apikey: '7ab213372c050ee9af2edf49abe86257',
       track_id: trackData.track_id,
@@ -251,7 +255,7 @@ class UNQfy {
     });
   }
 
-  addLyricsToTrack(trackName,lyrics){
+  addLyricsToTrack(trackName, lyrics) {
     this.getTrackByName(trackName).addLyrics(lyrics);
     console.log(`Hemos agregado la letra para el track ${trackName}`);
     return this;

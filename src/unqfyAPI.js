@@ -29,11 +29,16 @@ app.use('/api', router);
 
 
 
-router.route('/artists').post((req,res) => {  
+router.route('/artists').post((req,res,next) => {  
   const unqfy = getUNQfy('unqfy.txt');
-  unqfy.addArtist({name :req.body.name,country: req.body.country});
-  saveUNQfy(unqfy,'unqfy.txt');
-  res.json(unqfy.getArtistByName(req.body.name));
+  try {
+    unqfy.addArtist({name :req.body.name,country: req.body.country});
+    saveUNQfy(unqfy,'unqfy.txt');
+    res.json(unqfy.getArtistByName(req.body.name));  
+  } catch (error) {
+    if (error instanceof unqmod.ExceptionUNQfy)
+      next(new errors.ResourceAlreadyExists());
+  }
 })
   .get((req,res) => {      
     const unqfy = getUNQfy('unqfy.txt');
@@ -76,7 +81,6 @@ router.route('/albums/:id').get((req,res,next)=>{
   const unqfy = getUNQfy('unqfy.txt');
   try {
     res.json(unqfy.getAlbumByID(parseInt(req.params.id)));
-    
   } catch (error) {
     if (error instanceof unqmod.ExceptionUNQfy)
       next(new errors.ResourceNotFound());
