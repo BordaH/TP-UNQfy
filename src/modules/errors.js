@@ -12,12 +12,16 @@ class ResourceNotFound extends APIError {
     super('ResourceNotFound',404,'RESOURCE_NOT_FOUND');
   }
 }
-
 class ResourceAlreadyExists extends APIError {
   constructor(){
     super('ResourceAlreadyExists',409,'RESOURCE_ALERADY_EXISTS');
   }
 }
+class BadRequest extends APIError{
+    constructor(){
+      super('BadRequest',400,'BAD_REQUEST');
+    }
+  }
 
 function errorHandler(err, req, res, next) {
   console.error(err); // imprimimos el error en consola
@@ -35,5 +39,6 @@ module.exports = {
   APIError,
   ResourceNotFound,
   ResourceAlreadyExists,
+  BadRequest,
   errorHandler 
 };
