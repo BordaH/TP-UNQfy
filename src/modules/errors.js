@@ -9,7 +9,7 @@ class APIError extends Error {
 
 class ResourceNotFound extends APIError {
   constructor(){
-    super('ResourceNotFound',409,'RESOURCE_NOT_FOUND');
+    super('ResourceNotFound',404,'RESOURCE_NOT_FOUND');
   }
 }
 

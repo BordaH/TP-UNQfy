@@ -95,7 +95,10 @@ router.route('/albums/:id').get((req,res,next)=>{
     res.status(200);
     res.end();
   });
-
+  app.all('*', function(req, res, next) {
+    next(new errors.ResourceNotFound());
+  });
+  
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });
 });
