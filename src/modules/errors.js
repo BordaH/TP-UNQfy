@@ -14,7 +14,7 @@ class ResourceNotFound extends APIError {
 }
 class ResourceAlreadyExists extends APIError {
   constructor(){
-    super('ResourceAlreadyExists',409,'RESOURCE_ALERADY_EXISTS');
+    super('ResourceAlreadyExists',409,'RESOURCE_ALREADY_EXISTS');
   }
 }
 class RelatedResourceNotFound extends APIError {
