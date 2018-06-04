@@ -7,6 +7,9 @@ class Artist {
   }
 
   addAlbum(album) {
+    if(this.albums.some(a => a.name === album.name))
+    throw new DuplicateAlbumException();
+    else
     this.albums.push(album);
   }
   addAlbums(albums){
@@ -55,6 +58,13 @@ class Artist {
   }
 }
 
+class DuplicateAlbumException {
+  constructor(){
+    this.message = `Ya existe un album con el mismo nombre para el artista ${this.name}`;
+  }
+}
+
 module.exports = {
   Artist,
+  DuplicateAlbumException
 };

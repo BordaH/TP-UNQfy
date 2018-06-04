@@ -3,6 +3,7 @@ const fs = require('fs');
 const bodyParser = require('body-parser');
 const unqmod = require('./unqfy');
 const errors = require('./modules/errors');
+const artistmod = require('./modules/artist');
 
 const app = express();          
 const router = express.Router();
@@ -31,15 +32,15 @@ app.use('/api', router);
 
 router.route('/artists').post((req,res,next) => {  
   const unqfy = getUNQfy('unqfy.txt');
-  if("name" in req.body && "country" in req.body){
-   try {
-    unqfy.addArtist({name :req.body.name,country: req.body.country});
-    saveUNQfy(unqfy,'unqfy.txt');
-    res.json(unqfy.getArtistByName(req.body.name));  
-  } catch (error) {
-    if (error instanceof unqmod.ExceptionUNQfy)
-      next(new errors.ResourceAlreadyExists());
-  }
+  if('name' in req.body && 'country' in req.body){
+    try {
+      unqfy.addArtist({name :req.body.name,country: req.body.country});
+      saveUNQfy(unqfy,'unqfy.txt');
+      res.json(unqfy.getArtistByName(req.body.name));  
+    } catch (error) {
+      if (error instanceof unqmod.ExceptionUNQfy)
+        next(new errors.ResourceAlreadyExists());
+    }
   }else{
     next(new errors.BadRequest());
   }
@@ -53,14 +54,14 @@ router.route('/artists').post((req,res,next) => {
 router.route('/artists/:id').get((req,res,next)=> {
   const unqfy = getUNQfy('unqfy.txt'); 
   try {
-        res.json(unqfy.getArtistByID(parseInt( req.params.id)));
-      } catch (error) {
-        if (error instanceof unqmod.ExceptionUNQfy)
-          next(new errors.ResourceNotFound());
-        else {
-          next(error);
-      }
+    res.json(unqfy.getArtistByID(parseInt( req.params.id)));
+  } catch (error) {
+    if (error instanceof unqmod.ExceptionUNQfy)
+      next(new errors.ResourceNotFound());
+    else {
+      next(error);
     }
+  }
 })
   .delete((req,res)=> {  
     const unqfy = getUNQfy('unqfy.txt');
@@ -70,10 +71,15 @@ router.route('/artists/:id').get((req,res,next)=> {
     res.end();
   });
 router.route('/albums').post((req,res,next)=>{
-  if("artistId" in req.body && "name" in req.body && "year" in req.body){
+  if('artistId' in req.body && 'name' in req.body && 'year' in req.body){
     const unqfy = getUNQfy('unqfy.txt');
     const artist = unqfy.getArtistByID(req.body.artistId);
-    unqfy.addAlbum(artist.name,{name :req.body.name,year: req.body.year});
+    try {
+      unqfy.addAlbum(artist.name,{name :req.body.name,year: req.body.year});
+    } catch (error) {
+      if (error instanceof artistmod.DuplicateAlbumException)
+        next(new errors.ResourceAlreadyExists());
+    }
     saveUNQfy(unqfy,'unqfy.txt');
     res.json(unqfy.getAlbumByName(req.body.name));
   }else{
@@ -104,9 +110,9 @@ router.route('/albums/:id').get((req,res,next)=>{
     res.status(200);
     res.end();
   });
-  app.all('*', function(req, res, next) {
-    next(new errors.ResourceNotFound());
-  });
+app.all('*', (req, res, next) => {
+  next(new errors.ResourceNotFound());
+});
   
 router.route('/').get((req, res) => {
   res.json({ message: 'APIRest unqfy' });

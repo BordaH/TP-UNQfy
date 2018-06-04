@@ -51,7 +51,7 @@ class UNQfy {
   }
 
   searchAlbumByName(name) {
-    const list = [];
+    let list = [];
     this.artists.forEach(a => a.getAlbumsByName(list, name));
     return list;
   }
