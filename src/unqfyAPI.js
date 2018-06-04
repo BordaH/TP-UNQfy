@@ -81,12 +81,14 @@ router.route('/artists/:id').get((req,res,next)=> {
 router.route('/albums').post((req,res,next)=>{
   if('artistId' in req.body && 'name' in req.body && 'year' in req.body){
     const unqfy = getUNQfy('unqfy.txt');
-    const artist = unqfy.getArtistByID(req.body.artistId);
     try {
+      const artist = unqfy.getArtistByID(req.body.artistId);
       unqfy.addAlbum(artist.name,{name :req.body.name,year: req.body.year});
     } catch (error) {
       if (error instanceof artistmod.DuplicateAlbumException)
         next(new errors.ResourceAlreadyExists());
+      if (error instanceof unqmod.ExceptionUNQfy)
+        next(new errors.ResourceNotFound());
     }
     saveUNQfy(unqfy,'unqfy.txt');
     res.json(unqfy.getAlbumByName(req.body.name));
