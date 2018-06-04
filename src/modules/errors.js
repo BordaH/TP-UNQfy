@@ -38,7 +38,7 @@ function errorHandler(err, req, res, next) {
   }else if (err.type === 'entity.parse.failed'){
     // body-parser error para JSON invalido
     res.status(err.status);
-    res.json({status: 400, errorCode: 'INVALID_JSON'});
+    res.json({status: 400, errorCode: 'BAD_REQUEST'});
   } else {
     // continua con el manejador de errores por defecto
     next(err);
