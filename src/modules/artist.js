@@ -8,9 +8,9 @@ class Artist {
 
   addAlbum(album) {
     if(this.albums.some(a => a.name === album.name))
-    throw new DuplicateAlbumException();
+      throw new DuplicateAlbumException();
     else
-    this.albums.push(album);
+      this.albums.push(album);
   }
   addAlbums(albums){
     albums.forEach(album => this.addAlbum(album));

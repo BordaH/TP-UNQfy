@@ -63,9 +63,17 @@ router.route('/artists/:id').get((req,res,next)=> {
     }
   }
 })
-  .delete((req,res)=> {  
+  .delete((req,res,next)=> {  
     const unqfy = getUNQfy('unqfy.txt');
-    unqfy.deleteArtistByID(parseInt( req.params.id));
+    try {
+      unqfy.deleteArtistByID(parseInt( req.params.id));
+    } catch (error) {
+      if (error instanceof unqmod.ExceptionUNQfy){
+        next(new errors.ResourceNotFound());
+      }else{
+        next(error);
+      }
+    }
     saveUNQfy(unqfy,'unqfy.txt');
     res.status(200);
     res.end();

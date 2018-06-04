@@ -134,7 +134,11 @@ class UNQfy {
 
   deleteArtistByID(id) {
     const newList = this.artists.filter(artist => artist.id !== id);
-    this.artists = newList;
+    if(this.artists.length !== newList.length){
+      this.artists = newList;
+    }else{
+      throw new ExceptionUNQfy(`There is no artist with id : ${id}` );
+    }
   }
 
   deleteAlbumByID(id) {
