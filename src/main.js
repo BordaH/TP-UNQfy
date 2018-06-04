@@ -19,7 +19,7 @@ function saveUNQfy(unqfy, filename) {
 
 function toSeconds(argumento) {
   const args = argumento.split(':');
-  return parseInt(args[0]) * 60 + args[1];
+  return parseInt((args[0]) * 60) + parseInt(args[1]);
 }
 
 function main() {
@@ -29,7 +29,7 @@ function main() {
 
   switch (argumentos[0]) {
   case 'addTrack':
-    unqfy.addTrack(argumentos[1], { name: argumentos[2], duration: this.toSeconds(argumentos[3]), genres: argumentos[4] });
+    unqfy.addTrack(argumentos[1], { name: argumentos[2], duration: toSeconds(argumentos[3]), genres: argumentos[4] });
     break;
   case 'addArtist':
     unqfy.addArtist({name: argumentos[1], country:argumentos[2]});
@@ -58,6 +58,12 @@ function main() {
   case 'getPlaylistByName':
     console.log(unqfy.getPlaylistByName(argumentos[1]));
     break;
+  case 'populateAlbumsForArtist':
+    unqfy.populateAlbumsForArtist(argumentos[1]).then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
+    break;
+  case 'getLyrics':
+    unqfy.getLyrics(argumentos[1]).then(responseUNQfy => saveUNQfy(responseUNQfy,'unqfy.txt'));
+    break;  
   default:
     console.log('Sorry, that is not something I know how to do.');
   }
