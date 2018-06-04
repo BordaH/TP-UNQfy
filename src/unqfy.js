@@ -182,6 +182,14 @@ class UNQfy {
     }
   }
 
+  getAllAlbums(){
+    let list = [];
+    this.artists.forEach(a => {
+      list = list.concat(a.getAlbums());
+    });
+    return list;
+  }
+
   addPlaylist(name, genresToInclude, maxDuration) {
     /* El objeto playlist creado debe soportar (al menos):
       * una propiedad name (string)

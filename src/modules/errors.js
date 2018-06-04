@@ -17,6 +17,12 @@ class ResourceAlreadyExists extends APIError {
     super('ResourceAlreadyExists',409,'RESOURCE_ALERADY_EXISTS');
   }
 }
+class RelatedResourceNotFound extends APIError {
+  constructor(){
+    super('RelatedResourceNotFound',404,'RELATED_RESOURCE_NOT_FOUND');
+  }
+}
+
 class BadRequest extends APIError{
   constructor(){
     super('BadRequest',400,'BAD_REQUEST');
@@ -43,6 +49,7 @@ module.exports = {
   APIError,
   ResourceNotFound,
   ResourceAlreadyExists,
+  RelatedResourceNotFound,
   BadRequest,
   errorHandler 
 };

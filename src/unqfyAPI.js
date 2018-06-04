@@ -7,7 +7,7 @@ const artistmod = require('./modules/artist');
 
 const app = express();          
 const router = express.Router();
-const port = process.env.PORT || 8080; 
+const port = process.env.PORT || 5000; 
 
 function getUNQfy(filename) {
   let unqfy = new unqmod.UNQfy();
@@ -49,6 +49,9 @@ router.route('/artists').post((req,res,next) => {
     const unqfy = getUNQfy('unqfy.txt');
     if(req.query.name)
       res.json(unqfy.searchArtistByName(req.query.name));
+    else{
+      res.json(unqfy.artists);
+    }
   });
 
 router.route('/artists/:id').get((req,res,next)=> {
@@ -88,7 +91,7 @@ router.route('/albums').post((req,res,next)=>{
       if (error instanceof artistmod.DuplicateAlbumException)
         next(new errors.ResourceAlreadyExists());
       if (error instanceof unqmod.ExceptionUNQfy)
-        next(new errors.ResourceNotFound());
+        next(new errors.RelatedResourceNotFound());
     }
     saveUNQfy(unqfy,'unqfy.txt');
     res.json(unqfy.getAlbumByName(req.body.name));
@@ -100,6 +103,8 @@ router.route('/albums').post((req,res,next)=>{
     const unqfy = getUNQfy('unqfy.txt');
     if(req.query.name)
       res.json(unqfy.searchAlbumByName(req.query.name));
+    else
+      res.json(unqfy.getAllAlbums());
   });
 
 router.route('/albums/:id').get((req,res,next)=>{
