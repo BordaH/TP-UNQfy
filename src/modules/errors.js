@@ -18,10 +18,10 @@ class ResourceAlreadyExists extends APIError {
   }
 }
 class BadRequest extends APIError{
-    constructor(){
-      super('BadRequest',400,'BAD_REQUEST');
-    }
+  constructor(){
+    super('BadRequest',400,'BAD_REQUEST');
   }
+}
 
 function errorHandler(err, req, res, next) {
   console.error(err); // imprimimos el error en consola
@@ -33,7 +33,7 @@ function errorHandler(err, req, res, next) {
     // body-parser error para JSON invalido
     res.status(err.status);
     res.json({status: 400, errorCode: 'INVALID_JSON'});
-    } else {
+  } else {
     // continua con el manejador de errores por defecto
     next(err);
   }

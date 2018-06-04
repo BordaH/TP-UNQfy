@@ -111,9 +111,18 @@ router.route('/albums/:id').get((req,res,next)=>{
       next(error);  
   }
 })
-  .delete((req,res)=>{
+  .delete((req,res,next)=>{
     const unqfy = getUNQfy('unqfy.txt');
-    unqfy.deleteAlbumByID(parseInt(req.params.id));
+    try {
+      unqfy.deleteAlbumByID(parseInt(req.params.id));
+    } catch (error) {
+      if(error instanceof unqmod.ExceptionUNQfy){
+        next(new errors.ResourceNotFound());
+      }
+      else{
+        next(error);
+      }
+    }
     saveUNQfy(unqfy,'unqfy.txt');
     res.status(200);
     res.end();

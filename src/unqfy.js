@@ -143,7 +143,10 @@ class UNQfy {
 
   deleteAlbumByID(id) {
     const artist = this.artists.find(a => a.hasAlbumByID(id));
-    artist.deleteAlbumByID(id);
+    if(artist !== undefined)
+      artist.deleteAlbumByID(id);
+    else
+      throw new ExceptionUNQfy(`There is no album with id: ${id}`);
   }
 
   getAlbumByName(name) {
