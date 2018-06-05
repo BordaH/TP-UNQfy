@@ -9,7 +9,7 @@ class MusixMatchAPI {
       apikey: this.apikey,
       q_track: trackName,
     };
-    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.lyrics.get',qs);
+    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.search',qs);
     return rp(options).then((response) => {
       console.log(response);
       return {
