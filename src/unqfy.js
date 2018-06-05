@@ -5,9 +5,10 @@ const modPlaylist = require('./modules/playlist');
 const modTrack = require('./modules/track');
 const modAlbum = require('./modules/album');
 const spotifymod = require('./modules/spotifyAPI');
+const musixMatchMod = require('./modules/musixMatchAPI');
 
 const spotifyAPI = new spotifymod.SpotifyAPI();
-
+const musixMatchAPI = new musixMatchMod.MusixMatchAPI();
 class UNQfy {
 
   constructor() {
@@ -16,13 +17,6 @@ class UNQfy {
     this.playlists = [];
   }
 
-  getOptionsMusixMatch(endPoint, params) {
-    return {
-      url: endPoint,
-      json: true,
-      qs: params,
-    };
-  }
   getTracksMatchingGenres(genres) {
     // Debe retornar todos los tracks que contengan alguno de los generos en el parametro genres
     const res = [];
@@ -51,7 +45,7 @@ class UNQfy {
   }
 
   searchAlbumByName(name) {
-    let list = [];
+    const list = [];
     this.artists.forEach(a => a.getAlbumsByName(list, name));
     return list;
   }
@@ -232,44 +226,14 @@ class UNQfy {
   getLyrics(trackName) {
     const track = this.getTrackByName(trackName);
     if (track.getLyrics() === '') {
-      return this.getTrackMusixMatchId(trackName)
-        .then(response => this.getLyricsMusixMatch(response))
+      return musixMatchAPI.getTrackMusixMatchId(trackName)
+        .then(response => musixMatchAPI.getLyricsMusixMatch(response))
         .then(response => this.addLyricsToTrack(trackName, response.lyrics));
     } else {
       console.log(track.getLyrics());
-      /*eslint-disable*/
       return new Promise((resolve, reject) => resolve(this));
-      /*eslint-enable*/
     }
   }
-
-  getTrackMusixMatchId(trackName) {
-    const qs = {
-      apikey: '7ab213372c050ee9af2edf49abe86257',
-      q_track: trackName,
-    };
-    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.search', qs);
-    return rp(options).then((response) => {
-      return {
-        track_name: trackName,
-        track_id: response.message.body.track_list[0].track.track_id,
-        lyrics: undefined,
-      };
-    });
-  }
-
-  getLyricsMusixMatch(trackData) {
-    const qs = {
-      apikey: '7ab213372c050ee9af2edf49abe86257',
-      track_id: trackData.track_id,
-    };
-    const options = this.getOptionsMusixMatch('http://api.musixmatch.com/ws/1.1/track.lyrics.get', qs);
-    return rp(options).then(response => {
-      trackData.lyrics = response.message.body.lyrics.lyrics_body;
-      return trackData;
-    });
-  }
-
   addLyricsToTrack(trackName, lyrics) {
     this.getTrackByName(trackName).addLyrics(lyrics);
     console.log(`Hemos agregado la letra para el track ${trackName}`);
