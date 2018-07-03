@@ -78,7 +78,7 @@ class UNQfy {
     }
   }
 
-  /* Debe soportar (al menos):
+  /* Debe soportar (al menos) :
        params.name (string)
        params.duration (number)
        params.genres (lista de strings)
@@ -244,7 +244,7 @@ class UNQfy {
     const myArtist = this.getArtistByName(artistName);
     const mappedAlbums = albums.map(album => {
       const albumYear = album.release_date.split('-')[0];
-      return { name: album.name, year: albumYear };
+      return new modAlbum.Album(album.name,albumYear,this.nextID++);
     });
 
     myArtist.addAlbums(mappedAlbums);
