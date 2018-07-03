@@ -28,5 +28,44 @@ router.route('/subscribe').post((req,res)=> {
     });
 });
 
+router.route('/unsubscribe').post((req,res)=> {
+  const options = {
+    uri: `http://localhost:5000/api/artists/${req.body.artistId}`,
+    json: true
+  };
+  rp(options).
+    then(()=> {
+      subscriptionsList.deleteSubscriber(parseInt(req.body.artistId),req.body.email);
+      res.json(subscriptionsList);
+    });
+});
+
+router.route('/subscriptions')
+  .get((req,res)=>{
+    const options = {
+      uri: `http://localhost:5000/api/artists/${req.query.artistId}`,
+      json: true
+    };
+    rp(options).
+      then(()=> {
+        const response = {
+          artistId : req.query.artistId,
+          subscriptors : subscriptionsList.getSubscrptiors(req.query.artistId)
+        };
+        res.json(response);
+      });
+  })
+  .delete((req,res) => {
+    const options = {
+      uri: `http://localhost:5000/api/artists/${req.body.artistId}`,
+      json: true
+    };
+    rp(options).
+      then(()=> {
+        subscriptionsList.deleteAllSubscriptors(parseInt(req.body.artistId));
+        res.json(subscriptionsList);
+      });
+  });
+
 app.listen(port);
  
