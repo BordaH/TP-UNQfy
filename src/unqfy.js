@@ -6,6 +6,7 @@ const modTrack = require('./modules/track');
 const modAlbum = require('./modules/album');
 const spotifymod = require('./modules/spotifyAPI');
 const musixMatchMod = require('./modules/musixMatchAPI');
+const observermod = require('./modules/userObserver');
 
 const spotifyAPI = new spotifymod.SpotifyAPI();
 const musixMatchAPI = new musixMatchMod.MusixMatchAPI();
@@ -260,7 +261,7 @@ class UNQfy {
   static load(filename = 'unqfy.json') {
     const fs = new picklejs.FileSerializer();
     // TODO: Agregar a la lista todas las clases que necesitan ser instanciadas
-    const classes = [UNQfy, modArtist.Artist, modTrack.Track, modAlbum.Album, modPlaylist.Playlist];
+    const classes = [UNQfy, modArtist.Artist, modTrack.Track, modAlbum.Album, modPlaylist.Playlist,observermod.NotificationsObserver];
     fs.registerClasses(...classes);
     return fs.load(filename);
   }

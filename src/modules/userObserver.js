@@ -2,7 +2,7 @@ const rp = require('request-promise');
 
 class NotificationsObserver {
   constructor(port){
-    this.baseURI = `localhost:${port}/api/`;
+    this.baseURI = `http://localhost:${port}/api/`;
   }
 
   getOptions(method,endPoint,body){
@@ -14,17 +14,17 @@ class NotificationsObserver {
     };
   }
 
-  update(artistId,artistName,album){
+  update(artistId,artistName,albumName){
     const body = {
       artistId : artistId,
       subject: `Nuevo album para artista ${artistName}`,
-      message: `Se ha agregado el album ${album} al artista ${artistName}`,
+      message: `Se ha agregado el album ${albumName} al artista ${artistName}`,
       form: 'UNQFY <UNQfy.notifications@gmail.com>'
     };
-    console.log(body);
-    //rp(this.getOptions('POST','notify',body));
+    rp(this.getOptions('POST','notify',body));
   }
 }
 
-const observer = new NotificationsObserver('8080');
-observer.update(12,'Luca', 'Album de luca');
+module.exports = {
+  NotificationsObserver,
+};
