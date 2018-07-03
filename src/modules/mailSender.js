@@ -6,8 +6,8 @@ class MailSender {
       port: 587,
       secure: false, // true for 465, false for other ports
       auth: {
-        user: 'lhazuca@gmail.com',
-        pass: '',
+        user: 'lospibes.unqfy.notifier@gmail.com',
+        pass: 'lucacapo',
       },
     });
   }
