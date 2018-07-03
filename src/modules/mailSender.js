@@ -7,7 +7,7 @@ class MailSender {
       secure: false, // true for 465, false for other ports
       auth: {
         user: 'lhazuca@gmail.com',
-        pass: 'mugiwaranokaizoku40307822',
+        pass: '',
       },
     });
   }
