@@ -7,9 +7,12 @@ const modAlbum = require('./modules/album');
 const spotifymod = require('./modules/spotifyAPI');
 const musixMatchMod = require('./modules/musixMatchAPI');
 const observermod = require('./modules/userObserver');
+const youtubemod = require('./modules/youtubeAPI');
 
 const spotifyAPI = new spotifymod.SpotifyAPI();
 const musixMatchAPI = new musixMatchMod.MusixMatchAPI();
+const youtubeAPI = new youtubemod.YouTubeAPI();
+
 class UNQfy {
 
   constructor() {
@@ -256,6 +259,10 @@ class UNQfy {
     return this;
   }
 
+  getVideosForArtistByName(artistId){
+    const artist = this.getArtistByID(artistId);
+    return youtubeAPI.searchVideosForArtist(artist.name);
+  }
   save(filename = 'unqfy.json') {
     new picklejs.FileSerializer().serialize(filename, this);
   }

@@ -81,6 +81,23 @@ router.route('/artists/:id').get((req,res,next)=> {
     res.status(200);
     res.end();
   });
+router.route('/videos').get((req,res,next) => {      
+  const unqfy = getUNQfy('unqfy.txt');
+  if(req.query.id){
+    console.log(req.query.id);
+    try{
+      unqfy.getVideosForArtistByName(parseInt(req.query.id)).then(response=>res.json(response));
+    }catch(error){
+      if(error instanceof unqmod.ExceptionUNQfy){
+        next(new errors.ResourceNotFound);
+      }else{
+        next(error);
+      }
+    }
+  }else{
+    next(new errors.BadRequest());
+  }
+});
 router.route('/albums').post((req,res,next)=>{
   if('artistId' in req.body && 'name' in req.body && 'year' in req.body){
     const unqfy = getUNQfy('unqfy.txt');
