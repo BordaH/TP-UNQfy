@@ -2,7 +2,8 @@ const rp = require('request-promise');
 
 class NotificationsObserver {
   constructor(port){
-    this.baseURI = `http://localhost:${port}/api/`;
+    this//.baseURI = `http://localhost:${port}/api/`;
+    this.baseURI = `http://172.20.0.22:5001/api`;
   }
 
   getOptions(method,endPoint,body){

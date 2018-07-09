@@ -24,7 +24,8 @@ function relatedResourceErrorHandler(error,next){
 
 function checkArtistOptions(id){
   return {
-    uri: `http://localhost:5000/api/artists/${id}`,
+   // uri: `http://localhost:5000/api/artists/${id}`,
+    uri: `http://172.20.0.21:5000/api/artists/${id}`,
     json: true
   };
 }
