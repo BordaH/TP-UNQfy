@@ -1,12 +1,12 @@
-const observermod = require('./userObserver');
+const observablemod = require('./observable');
 
-class Artist {
+class Artist extends observablemod.Observable{
   constructor(_name, _country,_id) {
+    super();
     this.name = _name;
     this.country = _country;
     this.albums = [];
     this.id = _id;
-    this.observer = new observermod.NotificationsObserver(8080); 
   }
 
   addAlbum(album) {
@@ -14,7 +14,7 @@ class Artist {
       throw new DuplicateAlbumException();
     else{
       this.albums.push(album);
-      this.observer.update(this.id,this.name,album.name);
+      this.notifyAll({reason : 'ALBUM ADDED', albumName: album.name,artist: this});
     }
   }
   addAlbums(albums){

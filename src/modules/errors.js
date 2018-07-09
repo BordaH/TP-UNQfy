@@ -43,6 +43,7 @@ function errorHandler(err, req, res, next) {
     // continua con el manejador de errores por defecto
     res.status(500);
     res.json({status: 500,errorCode: 'INTERNAL_SERVER_ERROR'});
+    //next();
   }
 }
 

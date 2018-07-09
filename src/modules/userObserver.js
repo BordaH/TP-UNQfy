@@ -14,12 +14,17 @@ class NotificationsObserver {
     };
   }
 
-  update(artistId,artistName,albumName){
+  update(change){
+    if(change.reason === 'ALBUM ADDED'){
+      this.updateAlbumAdded(change.artist.id,change.artist.name,change.albumName);
+    }
+  }
+  updateAlbumAdded(artistId,artistName,albumName){
     const body = {
       artistId : artistId,
       subject: `Nuevo album para artista ${artistName}`,
       message: `Se ha agregado el album ${albumName} al artista ${artistName}`,
-      form: 'UNQFY <UNQfy.notifications@gmail.com>'
+      from: 'UNQFY <UNQfy.notifications@gmail.com>'
     };
     rp(this.getOptions('POST','notify',body));
   }

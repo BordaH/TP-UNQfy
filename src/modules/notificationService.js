@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use('/api', router);
 
 function relatedResourceErrorHandler(error,next){
-  console.log(error);
+  //console.log(error);
   error.error.errorCode === 'RESOURCE_NOT_FOUND' ? next(new errors.RelatedResourceNotFound()) : next(error);
 }
 
@@ -85,6 +85,7 @@ router.route('/notify').post((req,res,next)=> {
       res.end();
     }).catch(error => relatedResourceErrorHandler(error,next));
 });
+
 app.all('*', (req, res, next) => {
   next(new errors.ResourceNotFound());
 });

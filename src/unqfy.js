@@ -56,7 +56,9 @@ class UNQfy {
   */
   addArtist(params) {
     if (!this.artists.some(a => a.name === params.name)) {
-      this.artists.push(new modArtist.Artist(params.name, params.country, this.nextID++));
+      const newArtist = new modArtist.Artist(params.name, params.country, this.nextID++);
+      this.artists.push(newArtist);
+      newArtist.addObserver(new observermod.NotificationsObserver(8080));
       console.log('The artist was added correctly');
     }
     else

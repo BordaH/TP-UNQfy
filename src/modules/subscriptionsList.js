@@ -3,10 +3,15 @@ class SubscriptionList {
     this.list = {};
   }
 
+  add(artistId,email){
+    const subs = this.getSubscrptiors(artistId);
+    if(!subs.includes(email)){
+      subs.push(email);
+    }
+  }
   addSubscriber(artistId,email){
     if(Object.keys(this.list).includes(`${artistId}`)){
-      this.list[`${artistId}`].push(email);
-      console.log(this.list);
+      this.add(artistId,email);
     }else{
       this.list[artistId] = [email];
       console.log(`no habia una lista asi que creamos una ${JSON.stringify(this.list)}`);
