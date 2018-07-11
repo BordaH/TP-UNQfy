@@ -20,7 +20,7 @@ class SubscriptionList {
 
   deleteSubscriber(artistId,email){
     if(this.list[`${artistId}`].includes(email)){
-      this.list[`${artistId}`].filter((mail)=> mail === email);
+      this.list = this.list[`${artistId}`].filter((mail)=> mail === email);
       console.log(`fue eliminado`);
     }else{
       console.log('el chabon no estaba subscripto');

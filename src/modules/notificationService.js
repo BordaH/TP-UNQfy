@@ -24,7 +24,7 @@ function relatedResourceErrorHandler(error,next){
 
 function checkArtistOptions(id){
   return {
-   // uri: `http://localhost:5000/api/artists/${id}`,
+ // uri: `http://localhost:5000/api/artists/${id}`,
     uri: `http://172.20.0.21:5000/api/artists/${id}`,
     json: true
   };
@@ -49,7 +49,7 @@ router.route('/unsubscribe').post((req,res,next)=> {
   rp(checkArtistOptions(req.body.artistId)).
     then(()=> {
       subscriptionsList.deleteSubscriber(parseInt(req.body.artistId),req.body.email);
-      res.json(subscriptionsList);
+      res.json(subscriptionsList.getSubscrptiors(req.body.artistId));
     })
     .catch(error => relatedResourceErrorHandler(error,next));
 });
